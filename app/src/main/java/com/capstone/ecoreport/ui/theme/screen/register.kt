@@ -14,6 +14,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.ClickableText
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Mail
 import androidx.compose.material.icons.filled.MailOutline
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.material.icons.filled.Visibility
@@ -74,7 +75,7 @@ fun RegisterScreen(onLoginClicked: () -> Unit) {
                 value = email,
                 onValueChange = { email = it },
                 label = { Text("Email") },
-                leadingIcon = { Icon(Icons.Default.MailOutline, contentDescription = null) },
+                leadingIcon = { Icon(Icons.Default.Mail, contentDescription = null) },
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(bottom = 8.dp)

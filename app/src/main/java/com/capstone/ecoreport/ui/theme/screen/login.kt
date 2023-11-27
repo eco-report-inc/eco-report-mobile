@@ -12,6 +12,7 @@ import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.ClickableText
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Mail
 import androidx.compose.material.icons.filled.MailOutline
 import androidx.compose.material3.Button
 import androidx.compose.material3.Icon
@@ -53,7 +54,7 @@ fun LoginScreen(onRegisterClicked: () -> Unit) {
                 value = email,
                 onValueChange = { email = it },
                 label = { Text("Email") },
-                leadingIcon = { Icon(Icons.Default.MailOutline, contentDescription = null) },
+                leadingIcon = { Icon(Icons.Default.Mail, contentDescription = null) },
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(bottom = 8.dp)
