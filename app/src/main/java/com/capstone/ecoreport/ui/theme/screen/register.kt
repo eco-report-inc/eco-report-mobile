@@ -7,6 +7,8 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.ClickableText
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
@@ -27,12 +29,14 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.capstone.ecoreport.R
 import com.capstone.ecoreport.ui.theme.EcoReportTheme
 import com.capstone.ecoreport.ui.theme.components.PasswordField
 
@@ -48,7 +52,7 @@ fun RegisterScreen(onLoginClicked: () -> Unit) {
             .fillMaxSize()
             .padding(16.dp)
     ) {
-        TextField(
+        OutlinedTextField(
             value = username,
             onValueChange = { username = it },
             label = { Text("Username") },
@@ -58,7 +62,7 @@ fun RegisterScreen(onLoginClicked: () -> Unit) {
                 .padding(bottom = 8.dp)
         )
 
-        TextField(
+        OutlinedTextField(
             value = email,
             onValueChange = { email = it },
             label = { Text("Email") },
@@ -88,11 +92,41 @@ fun RegisterScreen(onLoginClicked: () -> Unit) {
 
         Button(
             onClick = { /* Handle registration logic here */ },
+            shape = RoundedCornerShape(
+                topStart = 16.dp,
+                topEnd = 16.dp,
+                bottomStart = 4.dp,
+                bottomEnd = 4.dp
+            ),
             modifier = Modifier
                 .fillMaxWidth()
                 .height(56.dp)
         ) {
             Text("Register")
+        }
+
+        Spacer(modifier = Modifier.height(4.dp))
+
+        Button(
+            onClick = { /* Handle registration logic here */ },
+            shape = RoundedCornerShape(
+                topStart = 4.dp,
+                topEnd = 4.dp,
+                bottomStart = 16.dp,
+                bottomEnd = 16.dp
+            ),
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(56.dp)
+        ) {
+            Icon(painter = painterResource(
+                id = R.drawable.google),
+                contentDescription = null,
+                modifier = Modifier
+                    .size(32.dp)
+                    .padding(end = 8.dp)
+            )
+            Text("Register with Google")
         }
 
         Spacer(modifier = Modifier.height(16.dp))
