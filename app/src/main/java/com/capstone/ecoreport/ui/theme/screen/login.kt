@@ -49,6 +49,7 @@ fun LoginScreen(onRegisterClicked: () -> Unit) {
             modifier = Modifier
                 .fillMaxSize()
                 .wrapContentSize(Alignment.Center)
+                .align(Alignment.Center)
         ) {
             OutlinedTextField(
                 value = email,

@@ -60,6 +60,7 @@ fun RegisterScreen(onLoginClicked: () -> Unit) {
             modifier = Modifier
                 .fillMaxSize()
                 .wrapContentSize(Alignment.Center)
+                .align(Alignment.Center)
         ) {
             OutlinedTextField(
                 value = username,
