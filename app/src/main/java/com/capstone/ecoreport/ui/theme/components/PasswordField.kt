@@ -21,10 +21,10 @@ import androidx.compose.ui.text.input.VisualTransformation
 
 @Composable
 fun PasswordField(
+    modifier: Modifier = Modifier,
     value: String,
     onValueChange: (String) -> Unit,
     label: @Composable (() -> Unit)? = null,
-    modifier: Modifier = Modifier
 ) {
     var passwordVisibility by remember { mutableStateOf(false) }
 
