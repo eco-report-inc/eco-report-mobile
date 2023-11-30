@@ -28,6 +28,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.tooling.preview.Wallpapers
 import androidx.compose.ui.unit.dp
 import com.capstone.ecoreport.R
 import com.capstone.ecoreport.ui.theme.EcoReportTheme
@@ -123,7 +124,10 @@ fun LoginScreen(onRegisterClicked: () -> Unit) {
     }
 }
 
-@Preview(showBackground = true)
+@Preview(
+    showBackground = true,
+    wallpaper = Wallpapers.GREEN_DOMINATED_EXAMPLE
+    )
 @Composable
 fun LoginScreenPreview() {
     EcoReportTheme {
