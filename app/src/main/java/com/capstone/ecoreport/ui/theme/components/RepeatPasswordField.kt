@@ -21,12 +21,11 @@ import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 
 @Composable
-fun PasswordField(
+fun RepeatPasswordField(
     modifier: Modifier = Modifier,
     value: String,
     onValueChange: (String) -> Unit,
     label: @Composable (() -> Unit)? = null,
-    hasError: Boolean = false
 ) {
     var passwordVisibility by remember { mutableStateOf(false) }
 
@@ -50,10 +49,8 @@ fun PasswordField(
         },
         keyboardOptions = KeyboardOptions.Default.copy(
             keyboardType = KeyboardType.Password,
-            imeAction = ImeAction.Next
+            imeAction = ImeAction.Done
         ),
-        singleLine = true,
-        isError = hasError,
         visualTransformation = if (passwordVisibility) VisualTransformation.None else PasswordVisualTransformation(),
         modifier = modifier
     )
