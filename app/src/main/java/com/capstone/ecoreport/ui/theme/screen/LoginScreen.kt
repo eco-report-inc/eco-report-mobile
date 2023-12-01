@@ -22,7 +22,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -32,18 +31,13 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.Wallpapers
 import androidx.compose.ui.unit.dp
 import com.capstone.ecoreport.R
-import com.capstone.ecoreport.ui.auth.AuthRepository
-import com.capstone.ecoreport.ui.auth.LoginRequest
 import com.capstone.ecoreport.ui.theme.EcoReportTheme
 import com.capstone.ecoreport.ui.theme.components.PasswordField
-import kotlinx.coroutines.launch
 
 @Composable
 fun LoginScreen(onRegisterClicked: () -> Unit) {
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
-    val coroutineScope = rememberCoroutineScope()
-    val authRepository = AuthRepository()
 
     Box(
         modifier = Modifier
@@ -76,16 +70,7 @@ fun LoginScreen(onRegisterClicked: () -> Unit) {
             )
 
             Button(
-                onClick = {
-                    coroutineScope.launch {
-                        val loginResponse = authRepository.loginUser(LoginRequest(email, password))
-                        if (loginResponse.isSuccessful) {
-                            //Tambahkan Logika Ketika sukses login menuju ke home screen
-                        } else {
-                            val errorMessage = "Gagal melakukan login. ${loginResponse.message()}"
-                        }
-                    }
-                },
+                onClick = { /* Handle login logic here */ },
                 shape = RoundedCornerShape(
                     topStart = 16.dp,
                     topEnd = 16.dp,
