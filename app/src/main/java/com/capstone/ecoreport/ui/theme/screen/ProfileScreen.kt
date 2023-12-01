@@ -18,6 +18,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Email
+import androidx.compose.material.icons.filled.Info
 import androidx.compose.material.icons.filled.LocationOn
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.material3.AlertDialog
@@ -25,10 +26,12 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
+import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -47,6 +50,7 @@ import androidx.compose.ui.semantics.testTagsAsResourceId
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.Wallpapers
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.window.DialogProperties
 import com.capstone.ecoreport.R
 import com.capstone.ecoreport.data.FeatureList
 import com.capstone.ecoreport.ui.theme.EcoReportTheme
@@ -64,7 +68,7 @@ val moreOptionsList = listOf(
 )
 @Composable
 fun ProfileScreen() {
-    var isLogoutDialogVisible by remember { mutableStateOf(false) }
+    var isLogoutDialogVisible = remember { mutableStateOf(false) }
 
     Scaffold(
         modifier = Modifier.semantics {
@@ -83,22 +87,26 @@ fun ProfileScreen() {
             PointContent()
             FooterContent()
             Spacer(modifier = Modifier.height(32.dp))
-            LogoutButton(onLogoutClicked = { isLogoutDialogVisible = true })
+            LogoutButton(onLogoutClicked = { isLogoutDialogVisible.value = true })
         }
 
-        if (isLogoutDialogVisible) {
-            // Tampilkan dialog logout di sini
-            LogoutDialog(
-                onDismiss = { isLogoutDialogVisible = false },
-                onLogoutConfirmed = {
-                    // Handle logout logic here
-                    isLogoutDialogVisible = false
-                }
-            )
+        when {
+            // ...
+            isLogoutDialogVisible.value -> {
+                LogoutDialog(
+                    onDismissRequest = { isLogoutDialogVisible.value = false },
+                    onConfirmation = {
+                        isLogoutDialogVisible.value = false
+                        println("Confirmation registered") // Add logic here to handle confirmation.
+                    },
+                    dialogTitle = "Logout akun",
+                    dialogText = "Apakah anda yakin untuk logout?",
+                    icon = Icons.Default.Info
+                )
+            }
         }
     }
 }
-
 
 @Composable
 fun ProfileContent(
@@ -260,24 +268,44 @@ fun LogoutButton(onLogoutClicked: () -> Unit) {
     }
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun LogoutDialog(onDismiss: () -> Unit, onLogoutConfirmed: () -> Unit) {
-    // Implementasi tampilan dialog logout di sini
-    // Kamu dapat menggunakan AlertDialog atau membuat tampilan kustom
-    // Sesuaikan dengan kebutuhan dan desain aplikasimu
-    // Contoh:
+fun LogoutDialog(
+    onDismissRequest: () -> Unit,
+    onConfirmation: () -> Unit,
+    dialogTitle: String,
+    dialogText: String,
+    icon: ImageVector,
+) {
     AlertDialog(
-        onDismissRequest = { onDismiss() },
-        title = { Text("Logout") },
-        text = { Text("Yakin untuk logout?") },
+        icon = {
+            Icon(icon, contentDescription = "Info")
+        },
+        title = {
+            Text(text = dialogTitle)
+        },
+        text = {
+            Text(text = dialogText)
+        },
+        onDismissRequest = {
+            onDismissRequest()
+        },
         confirmButton = {
-            Button(onClick = onLogoutConfirmed) {
-                Text("Logout")
+            TextButton(
+                onClick = {
+                    onConfirmation()
+                }
+            ) {
+                Text("Confirm")
             }
         },
         dismissButton = {
-            Button(onClick = onDismiss) {
-                Text("Cancel")
+            TextButton(
+                onClick = {
+                    onDismissRequest()
+                }
+            ) {
+                Text("Dismiss")
             }
         }
     )
