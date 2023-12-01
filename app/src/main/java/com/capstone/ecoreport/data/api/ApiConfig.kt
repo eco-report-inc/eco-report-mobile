@@ -1,4 +1,4 @@
-package com.capstone.ecoreport.ui.auth
+package com.capstone.ecoreport.data.api
 
 import com.capstone.ecoreport.BuildConfig
 import retrofit2.Retrofit

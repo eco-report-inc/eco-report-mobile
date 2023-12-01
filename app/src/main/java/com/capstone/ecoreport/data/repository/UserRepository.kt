@@ -1,5 +1,10 @@
-package com.capstone.ecoreport.ui.auth
+package com.capstone.ecoreport.data.repository
 
+import com.capstone.ecoreport.data.api.ApiService
+import com.capstone.ecoreport.data.models.LoginRequest
+import com.capstone.ecoreport.data.models.LoginResponse
+import com.capstone.ecoreport.data.models.RegisterRequest
+import com.capstone.ecoreport.data.models.RegisterResponse
 import retrofit2.Response
 
 class UserRepository(private val apiService: ApiService) {

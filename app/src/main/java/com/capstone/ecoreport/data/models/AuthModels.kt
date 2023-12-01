@@ -1,4 +1,4 @@
-package com.capstone.ecoreport.ui.auth
+package com.capstone.ecoreport.data.models
 
 import com.google.gson.annotations.SerializedName
 

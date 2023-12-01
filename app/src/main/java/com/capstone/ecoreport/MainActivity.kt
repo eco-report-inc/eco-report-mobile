@@ -33,11 +33,21 @@ class MainActivity : ComponentActivity() {
 @Composable
 fun AppNavigation() {
     var currentScreen by remember { mutableStateOf(Screen.Login) }
+
     when (currentScreen) {
         Screen.Login -> {
-            LoginScreen {
-                currentScreen = Screen.Register
-            }
+            LoginScreen(
+                onRegisterClicked = {
+                    currentScreen = Screen.Register
+                },
+                onLoginSuccess = {
+                    // Handle login success, if needed
+                    currentScreen = Screen.CreateForm
+                },
+                onLoginError = { error ->
+                    // Handle login error, if needed
+                }
+            )
         }
         Screen.Register -> {
             RegisterScreen {
@@ -49,6 +59,7 @@ fun AppNavigation() {
         }
     }
 }
+
 
 enum class Screen {
     Login,

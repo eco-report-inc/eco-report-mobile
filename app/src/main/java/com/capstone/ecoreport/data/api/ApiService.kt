@@ -1,5 +1,7 @@
-package com.capstone.ecoreport.ui.auth
+package com.capstone.ecoreport.data.api
 
+import com.capstone.ecoreport.data.models.LoginResponse
+import com.capstone.ecoreport.data.models.RegisterResponse
 import retrofit2.Response
 import retrofit2.http.Field
 import retrofit2.http.FormUrlEncoded
