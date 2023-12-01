@@ -15,6 +15,7 @@ android {
         versionName = "1.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+        buildConfigField("String", "BASE_URL", "\"http://34.128.82.27:3000/api/\"")
         vectorDrawables {
             useSupportLibrary = true
         }
@@ -38,6 +39,7 @@ android {
     }
     buildFeatures {
         compose = true
+        buildConfig = true
     }
     composeOptions {
         kotlinCompilerExtensionVersion = "1.4.3"
@@ -72,8 +74,7 @@ dependencies {
     implementation ("androidx.compose.material:material:1.5.4")
     implementation ("androidx.compose.material:material-icons-core:1.5.4")
     implementation("androidx.navigation:navigation-compose:2.4.0-alpha09")
-    implementation("com.squareup.retrofit2:retrofit:2.9.0")
-    implementation("com.squareup.retrofit2:converter-gson:2.9.0")
+
 
 
     testImplementation("junit:junit:4.13.2")
