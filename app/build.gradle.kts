@@ -40,7 +40,7 @@ android {
         compose = true
     }
     composeOptions {
-        kotlinCompilerExtensionVersion = "1.4.3"
+        kotlinCompilerExtensionVersion = "1.5.5"
     }
     packaging {
         resources {
@@ -71,10 +71,10 @@ dependencies {
     implementation("androidx.compose.material:material-icons-extended:1.5.4")
     implementation ("androidx.compose.material:material:1.5.4")
     implementation ("androidx.compose.material:material-icons-core:1.5.4")
-    implementation("androidx.navigation:navigation-compose:2.4.0-alpha09")
+    implementation("io.coil-kt:coil-compose:2.5.0")
+    implementation("androidx.navigation:navigation-compose:2.7.5")
     implementation("com.squareup.retrofit2:retrofit:2.9.0")
     implementation("com.squareup.retrofit2:converter-gson:2.9.0")
-
 
     testImplementation("junit:junit:4.13.2")
     androidTestImplementation("androidx.test.ext:junit:1.1.5")
