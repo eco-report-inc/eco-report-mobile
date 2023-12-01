@@ -32,11 +32,8 @@ import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.capstone.ecoreport.R
-import com.capstone.ecoreport.ui.auth.AuthRepository
-import com.capstone.ecoreport.ui.auth.RegisterRequest
 import com.capstone.ecoreport.ui.theme.EcoReportTheme
 import com.capstone.ecoreport.ui.theme.components.PasswordField
-import kotlinx.coroutines.launch
 
 @Composable
 fun RegisterScreen(onLoginClicked: () -> Unit) {
@@ -45,7 +42,6 @@ fun RegisterScreen(onLoginClicked: () -> Unit) {
     var password by remember { mutableStateOf("") }
     var repeatPassword by remember { mutableStateOf("") }
     val coroutineScope = rememberCoroutineScope()
-    val authRepository = AuthRepository()
 
     Box(
         modifier = Modifier
@@ -97,19 +93,7 @@ fun RegisterScreen(onLoginClicked: () -> Unit) {
             )
 
             Button(
-                onClick = {
-                    coroutineScope.launch {
-                        val registerResponse = authRepository.registerUser(
-                            RegisterRequest(username, email, password, "dummy_address")
-                        )
-                        //Tambahkan Logika Ketika sukses login menuju ke login screen
-                        if (registerResponse.isSuccessful) {
-                            onLoginClicked()
-                        } else {
-                            val errorMessage = "Gagal melakukan registrasi. ${registerResponse.message()}"
-                        }
-                    }
-                },
+                onClick = {},
                 shape = RoundedCornerShape(
                     topStart = 16.dp,
                     topEnd = 16.dp,
