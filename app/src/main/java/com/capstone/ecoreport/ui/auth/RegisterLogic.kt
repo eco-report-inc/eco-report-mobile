@@ -18,12 +18,10 @@ object RegisterLogic {
             onRegisterError.invoke("Passwords do not match.")
             return
         }
-
         try {
             val response = UserRepository(ApiConfig.createApiService()).register(
                 RegisterRequest(username, email, password, repeatPassword)
             )
-
             if (response.isSuccessful) {
                 onRegisterSuccess.invoke()
             } else {

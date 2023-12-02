@@ -15,7 +15,7 @@ android {
         versionName = "1.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
-        buildConfigField("String", "BASE_URL", "\"https://34.128.82.27:3000/api/\"")
+        buildConfigField("String", "BASE_URL", "\"http://34.128.82.27:3000/api/\"")
         vectorDrawables {
             useSupportLibrary = true
         }
