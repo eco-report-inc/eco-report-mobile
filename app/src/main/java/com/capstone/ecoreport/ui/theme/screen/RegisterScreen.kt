@@ -37,13 +37,12 @@ import com.capstone.ecoreport.ui.theme.components.EmailFieldWithIcon
 import com.capstone.ecoreport.ui.theme.components.PasswordField
 
 @Composable
-fun RegisterScreen(onLoginClicked: () -> Unit) {
+fun RegisterScreen(onRegisterClicked: () -> Unit) {
     var username by remember { mutableStateOf("") }
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
     var repeatPassword by remember { mutableStateOf("") }
     val coroutineScope = rememberCoroutineScope()
-    var isError by remember { mutableStateOf(false) }
 
     Box(
         modifier = Modifier
@@ -137,7 +136,7 @@ fun RegisterScreen(onLoginClicked: () -> Unit) {
             ClickableText(
                 text = AnnotatedString("Already have an account? Login"),
                 onClick = { offset ->
-                    onLoginClicked()
+                    onRegisterClicked()
                 },
                 modifier = Modifier
                     .fillMaxWidth()
@@ -152,6 +151,6 @@ fun RegisterScreen(onLoginClicked: () -> Unit) {
 @Composable
 fun RegisterScreenPreview() {
     EcoReportTheme {
-        RegisterScreen(onLoginClicked = {})
+        RegisterScreen(onRegisterClicked = {})
     }
 }

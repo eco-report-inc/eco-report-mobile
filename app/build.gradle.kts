@@ -1,6 +1,9 @@
+import org.jetbrains.kotlin.konan.properties.Properties
+
 plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
+    id("com.google.android.libraries.mapsplatform.secrets-gradle-plugin")
 }
 
 android {
@@ -18,6 +21,7 @@ android {
         vectorDrawables {
             useSupportLibrary = true
         }
+
     }
 
     buildTypes {
@@ -38,6 +42,7 @@ android {
     }
     buildFeatures {
         compose = true
+        buildConfig = true
     }
     composeOptions {
         kotlinCompilerExtensionVersion = "1.5.5"
@@ -71,6 +76,9 @@ dependencies {
     implementation("androidx.compose.material:material-icons-extended:1.5.4")
     implementation ("androidx.compose.material:material:1.5.4")
     implementation ("androidx.compose.material:material-icons-core:1.5.4")
+    implementation("com.google.maps.android:maps-compose:4.3.0")
+    implementation("com.google.maps.android:maps-compose-utils:4.3.0")
+    implementation("com.google.maps.android:maps-compose-widgets:4.3.0")
     implementation("io.coil-kt:coil-compose:2.5.0")
     implementation("androidx.navigation:navigation-compose:2.7.5")
     implementation("com.squareup.retrofit2:retrofit:2.9.0")
