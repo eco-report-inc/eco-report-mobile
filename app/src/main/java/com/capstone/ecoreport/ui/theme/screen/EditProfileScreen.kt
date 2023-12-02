@@ -13,12 +13,9 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
-import androidx.compose.material.icons.filled.Camera
 import androidx.compose.material.icons.filled.CameraAlt
-import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.IconButtonDefaults
@@ -34,16 +31,12 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.AnnotatedString
-import androidx.compose.ui.text.buildAnnotatedString
-import androidx.compose.ui.text.input.ImeAction
-import androidx.compose.ui.text.input.KeyboardType
-import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.Wallpapers
 import androidx.compose.ui.unit.dp
 import com.capstone.ecoreport.R
 import com.capstone.ecoreport.ui.theme.EcoReportTheme
+import com.capstone.ecoreport.ui.theme.components.EmailField
 import com.capstone.ecoreport.ui.theme.components.PasswordField
 import com.capstone.ecoreport.ui.theme.components.RepeatPasswordField
 
@@ -139,17 +132,13 @@ fun EditProfileScreen() {
                 .padding(vertical = 8.dp),
         )
 
-        OutlinedTextField(
+        EmailField(
             value = email,
             onValueChange = { email = it },
-            label = { Text("Email") },
+            label = "Email",
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(vertical = 8.dp),
-            keyboardOptions = KeyboardOptions.Default.copy(
-                keyboardType = KeyboardType.Email,
-                imeAction = ImeAction.Next
-            )
+                .padding(vertical = 8.dp)
         )
 
         PasswordField(
