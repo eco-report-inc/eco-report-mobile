@@ -33,6 +33,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.capstone.ecoreport.R
 import com.capstone.ecoreport.ui.theme.EcoReportTheme
+import com.capstone.ecoreport.ui.theme.components.EmailFieldWithIcon
 import com.capstone.ecoreport.ui.theme.components.PasswordField
 
 @Composable
@@ -42,6 +43,7 @@ fun RegisterScreen(onLoginClicked: () -> Unit) {
     var password by remember { mutableStateOf("") }
     var repeatPassword by remember { mutableStateOf("") }
     val coroutineScope = rememberCoroutineScope()
+    var isError by remember { mutableStateOf(false) }
 
     Box(
         modifier = Modifier
@@ -64,11 +66,10 @@ fun RegisterScreen(onLoginClicked: () -> Unit) {
                     .padding(bottom = 8.dp)
             )
 
-            OutlinedTextField(
+            EmailFieldWithIcon(
                 value = email,
                 onValueChange = { email = it },
-                label = { Text("Email") },
-                leadingIcon = { Icon(Icons.Default.Mail, contentDescription = null) },
+                label = "Email",
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(bottom = 8.dp)
