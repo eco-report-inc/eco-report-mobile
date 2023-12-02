@@ -46,7 +46,7 @@ import kotlinx.coroutines.launch
 fun RegisterScreen(
     onLoginClicked: () -> Unit,
     onRegisterSuccess: () -> Unit,
-    onRegisterError: (String) -> Unit // Tambahkan parameter callback untuk registrasi gagal
+    onRegisterError: (String) -> Unit
 ) {
     var username by remember { mutableStateOf("") }
     var email by remember { mutableStateOf("") }

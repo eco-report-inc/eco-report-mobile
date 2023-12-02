@@ -45,8 +45,8 @@ import kotlinx.coroutines.launch
 @Composable
 fun LoginScreen(
     onRegisterClicked: () -> Unit,
-    onLoginSuccess: () -> Unit, // Tambahkan parameter callback untuk login berhasil
-    onLoginError: (String) -> Unit // Tambahkan parameter callback untuk login gagal
+    onLoginSuccess: () -> Unit,
+    onLoginError: (String) -> Unit
 ) {
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
