@@ -3,6 +3,7 @@ package com.capstone.ecoreport.ui.auth
 import android.util.Log
 import com.capstone.ecoreport.data.models.LoginRequest
 import com.capstone.ecoreport.data.repository.UserRepository
+import java.io.IOException
 
 object LoginLogic {
     private const val TAG = "LoginLogic"
@@ -23,12 +24,22 @@ object LoginLogic {
             if (response.isSuccessful) {
                 onLoginSuccess.invoke()
             } else {
-                val errorMessage = "Login failed. ${response.message()}"
+                val errorMessage = when (response.code()) {
+                    401 -> "Invalid credentials. Please check your email and password."
+                    404 -> "User not found. Please check your email."
+                    else -> "Login failed. ${response.message()}"
+                }
                 Log.e(TAG, errorMessage)
                 onLoginError.invoke(errorMessage)
             }
+        } catch (e: IOException) {
+            // Kesalahan jaringan
+            val errorMessage = "Network error. Please check your internet connection."
+            Log.e(TAG, errorMessage, e)
+            onLoginError.invoke(errorMessage)
         } catch (e: Exception) {
-            val errorMessage = "An error occurred during login. Please check your internet connection."
+            // Kesalahan umum
+            val errorMessage = "An unexpected error occurred during login."
             Log.e(TAG, errorMessage, e)
             onLoginError.invoke(errorMessage)
         } finally {

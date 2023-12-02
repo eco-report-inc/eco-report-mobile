@@ -15,6 +15,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Mail
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.material3.Button
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
@@ -23,6 +24,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -31,16 +33,25 @@ import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.capstone.ecoreport.R
+import com.capstone.ecoreport.data.api.ApiConfig
+import com.capstone.ecoreport.data.repository.UserRepository
+import com.capstone.ecoreport.ui.auth.RegisterLogic
 import com.capstone.ecoreport.ui.theme.EcoReportTheme
 import com.capstone.ecoreport.ui.theme.components.PasswordField
+import kotlinx.coroutines.launch
 
 
 @Composable
-fun RegisterScreen(onLoginClicked: () -> Unit) {
+fun RegisterScreen(
+    onLoginClicked: () -> Unit,
+    onRegisterSuccess: () -> Unit,
+    onRegisterError: (String) -> Unit // Tambahkan parameter callback untuk registrasi gagal
+) {
     var username by remember { mutableStateOf("") }
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
     var repeatPassword by remember { mutableStateOf("") }
+    val coroutineScope = rememberCoroutineScope()
 
 
     Box(
@@ -92,8 +103,25 @@ fun RegisterScreen(onLoginClicked: () -> Unit) {
                     .padding(bottom = 16.dp)
             )
 
+            var loading by remember { mutableStateOf(false) }
+
             Button(
-                onClick = {/* Handle registration logic here */},
+                onClick = {
+                    coroutineScope.launch {
+                        RegisterLogic.performRegistration(
+                            username = username,
+                            email = email,
+                            password = password,
+                            repeatPassword = repeatPassword,
+                            userRepository = UserRepository(ApiConfig.createApiService()),
+                            onRegisterSuccess = {
+                                onRegisterSuccess() // Panggil callback jika registrasi berhasil
+                            },
+                            onRegisterError = { error -> onRegisterError(error) },
+                            onLoading = { loading = it }
+                        )
+                    }
+                },
                 shape = RoundedCornerShape(
                     topStart = 16.dp,
                     topEnd = 16.dp,
@@ -104,7 +132,11 @@ fun RegisterScreen(onLoginClicked: () -> Unit) {
                     .fillMaxWidth()
                     .height(56.dp)
             ) {
-                Text("Register")
+                if (loading) {
+                    CircularProgressIndicator()
+                } else {
+                    Text("Register")
+                }
             }
 
             Spacer(modifier = Modifier.height(4.dp))
@@ -151,6 +183,6 @@ fun RegisterScreen(onLoginClicked: () -> Unit) {
 @Composable
 fun RegisterScreenPreview() {
     EcoReportTheme {
-        RegisterScreen(onLoginClicked = {})
+        RegisterScreen(onLoginClicked = {}, onRegisterSuccess = {}, onRegisterError = {})
     }
 }
