@@ -11,6 +11,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import com.capstone.ecoreport.ui.theme.EcoReportTheme
 import com.capstone.ecoreport.ui.theme.screen.CreateForm
 import com.capstone.ecoreport.ui.theme.screen.LoginScreen
+import com.capstone.ecoreport.ui.theme.screen.ProfileScreen
 import com.capstone.ecoreport.ui.theme.screen.RegisterScreen
 
 
@@ -41,8 +42,7 @@ fun AppNavigation() {
                     currentScreen = Screen.Register
                 },
                 onLoginSuccess = {
-                    // Handle login success, if needed
-                    currentScreen = Screen.CreateForm
+                    currentScreen = Screen.ProfileScreen
                 },
                 onLoginError = { error ->
                     // Handle login error, if needed
@@ -50,21 +50,33 @@ fun AppNavigation() {
             )
         }
         Screen.Register -> {
-            RegisterScreen {
-                currentScreen = Screen.Login
-            }
+            RegisterScreen(
+                onLoginClicked = {
+                    currentScreen = Screen.Login
+                },
+                onRegisterSuccess = {
+                    // Handle registration success
+                    currentScreen = Screen.Login
+                },
+                onRegisterError = { error ->
+                    // Handle registration error, if needed
+                }
+            )
         }
         Screen.CreateForm -> {
             CreateForm()
         }
+        Screen.ProfileScreen -> {
+            ProfileScreen()
+        }
     }
 }
-
 
 enum class Screen {
     Login,
     Register,
-    CreateForm
+    CreateForm,
+    ProfileScreen
 }
 
 @Composable
