@@ -1,5 +1,6 @@
 package com.capstone.ecoreport.ui.theme.screen
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -18,7 +19,6 @@ import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
-import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -44,8 +44,8 @@ import kotlinx.coroutines.launch
 @Composable
 fun LoginScreen(
     onRegisterClicked: () -> Unit,
-    onLoginSuccess: () -> Unit, // Tambahkan parameter callback untuk login berhasil
-    onLoginError: (String) -> Unit // Tambahkan parameter callback untuk login gagal
+    onLoginSuccess: () -> Unit,
+    onLoginError: (String) -> Unit
 ) {
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
@@ -102,9 +102,12 @@ fun LoginScreen(
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(56.dp)
+                    .background(MaterialTheme.colorScheme.primary)
             ) {
                 if (loading) {
-                    CircularProgressIndicator()
+                    CircularProgressIndicator(
+                        color = MaterialTheme.colorScheme.onPrimary
+                    )
                 } else {
                     Text("Login")
                 }

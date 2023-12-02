@@ -59,6 +59,8 @@ fun AppNavigation() {
         }
     }
 }
+
+
 enum class Screen {
     Login,
     Register,

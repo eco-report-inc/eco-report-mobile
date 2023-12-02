@@ -8,7 +8,6 @@ import retrofit2.http.FormUrlEncoded
 import retrofit2.http.POST
 
 interface ApiService {
-
     @FormUrlEncoded
     @POST("user/register")
     suspend fun postRegister(
@@ -17,7 +16,6 @@ interface ApiService {
         @Field("password") password: String,
         @Field("address") address: String
     ): Response<RegisterResponse>
-
     @FormUrlEncoded
     @POST("user/login")
     suspend fun postLogin(
