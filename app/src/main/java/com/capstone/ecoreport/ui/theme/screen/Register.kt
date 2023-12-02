@@ -1,5 +1,6 @@
 package com.capstone.ecoreport.ui.theme.screen
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -131,9 +132,12 @@ fun RegisterScreen(
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(56.dp)
+                    .background(MaterialTheme.colorScheme.primary)
             ) {
                 if (loading) {
-                    CircularProgressIndicator()
+                    CircularProgressIndicator(
+                        color = MaterialTheme.colorScheme.onPrimary
+                    )
                 } else {
                     Text("Register")
                 }
