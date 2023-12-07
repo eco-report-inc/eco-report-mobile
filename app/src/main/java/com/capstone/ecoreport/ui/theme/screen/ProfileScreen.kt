@@ -326,7 +326,6 @@ fun MoreOptionsComp(
     }
 }
 
-
 @Preview(
     showBackground = true,
     wallpaper = Wallpapers.GREEN_DOMINATED_EXAMPLE
