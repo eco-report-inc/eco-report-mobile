@@ -1,5 +1,6 @@
 package com.capstone.ecoreport.ui.auth
 
+import android.content.Context
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -29,12 +30,15 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.capstone.ecoreport.R
+import com.capstone.ecoreport.Screen
 import com.capstone.ecoreport.data.api.ApiConfig
+import com.capstone.ecoreport.data.auth.AuthPreference
 import com.capstone.ecoreport.data.auth.AuthRepository
 import com.capstone.ecoreport.ui.theme.EcoReportTheme
 import com.capstone.ecoreport.ui.theme.components.PasswordField
@@ -43,6 +47,7 @@ import kotlinx.coroutines.launch
 
 @Composable
 fun RegisterScreen(
+    context: Context,
     onLoginClicked: () -> Unit,
     onRegisterSuccess: () -> Unit,
     onRegisterError: (String) -> Unit
@@ -52,6 +57,7 @@ fun RegisterScreen(
     var password by remember { mutableStateOf("") }
     var repeatPassword by remember { mutableStateOf("") }
     val coroutineScope = rememberCoroutineScope()
+    var currentScreen by remember { mutableStateOf(Screen.Login) }
 
 
     Box(
@@ -108,14 +114,16 @@ fun RegisterScreen(
             Button(
                 onClick = {
                     coroutineScope.launch {
+                        val authRepository = AuthRepository(ApiConfig.createApiService(context), AuthPreference(context))
                         RegisterViewModel.performRegistration(
                             username = username,
                             email = email,
                             password = password,
                             repeatPassword = repeatPassword,
-                            authRepository = AuthRepository(ApiConfig.createApiService()),
+                            authRepository = authRepository,
                             onRegisterSuccess = {
-                                onRegisterSuccess() // Panggil callback jika registrasi berhasil
+                                onRegisterSuccess()
+                                currentScreen = Screen.Login
                             },
                             onRegisterError = { error -> onRegisterError(error) },
                             onLoading = { loading = it }
@@ -185,7 +193,13 @@ fun RegisterScreen(
 @Preview(showBackground = true)
 @Composable
 fun RegisterScreenPreview() {
+    val context = LocalContext.current
     EcoReportTheme {
-        RegisterScreen(onLoginClicked = {}, onRegisterSuccess = {}, onRegisterError = {})
+        RegisterScreen(
+            context = context,
+            onLoginClicked = {},
+            onRegisterSuccess = {},
+            onRegisterError = {}
+        )
     }
 }

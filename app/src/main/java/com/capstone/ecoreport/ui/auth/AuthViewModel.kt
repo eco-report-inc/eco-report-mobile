@@ -3,7 +3,9 @@ package com.capstone.ecoreport.ui.auth
 import android.util.Log
 import com.capstone.ecoreport.data.models.LoginRequest
 import com.capstone.ecoreport.data.auth.AuthRepository
+import com.capstone.ecoreport.data.models.LoginResponse
 import com.capstone.ecoreport.data.models.RegisterRequest
+import retrofit2.Response
 import java.io.IOException
 
 object LoginViewModel {
@@ -13,7 +15,7 @@ object LoginViewModel {
         email: String,
         password: String,
         authRepository: AuthRepository,
-        onLoginSuccess: () -> Unit,
+        onLoginResponse: (Response<LoginResponse>) -> Unit,
         onLoginError: (String) -> Unit,
         onLoading: (Boolean) -> Unit
     ) {
@@ -22,8 +24,11 @@ object LoginViewModel {
             val response = authRepository.login(
                 LoginRequest(email, password)
             )
+            onLoginResponse.invoke(response)
+
             if (response.isSuccessful) {
-                onLoginSuccess.invoke()
+                val token = response.body()?.token ?: ""
+                authRepository.getAuthPref().saveAuthToken(token)
             } else {
                 val errorMessage = when (response.code()) {
                     401 -> "Invalid credentials. Please check your email and password."
@@ -34,12 +39,10 @@ object LoginViewModel {
                 onLoginError.invoke(errorMessage)
             }
         } catch (e: IOException) {
-            // Kesalahan jaringan
             val errorMessage = "Network error. Please check your internet connection."
             Log.e(TAG, errorMessage, e)
             onLoginError.invoke(errorMessage)
         } catch (e: Exception) {
-            // Kesalahan umum
             val errorMessage = "An unexpected error occurred during login."
             Log.e(TAG, errorMessage, e)
             onLoginError.invoke(errorMessage)
@@ -48,7 +51,7 @@ object LoginViewModel {
         }
     }
 }
-object RegisterViewModel {
+    object RegisterViewModel {
     private const val TAG = "RegisterViewModel"
 
     suspend fun performRegistration(
@@ -72,8 +75,10 @@ object RegisterViewModel {
                 RegisterRequest(username, email, password, repeatPassword)
             )
             if (response.isSuccessful) {
+                // Registrasi berhasil, panggil callback
                 onRegisterSuccess.invoke()
             } else {
+                // Registrasi gagal, panggil callback dengan pesan error
                 onRegisterError.invoke("Registration failed. Please try again.")
             }
         } catch (e: IOException) {
@@ -91,5 +96,6 @@ object RegisterViewModel {
         }
     }
 }
+
 
 

@@ -7,7 +7,8 @@ import com.capstone.ecoreport.data.models.RegisterRequest
 import com.capstone.ecoreport.data.models.RegisterResponse
 import retrofit2.Response
 
-class AuthRepository(private val apiService: ApiService) {
+class AuthRepository(private val apiService: ApiService, private val authPreference: AuthPreference) {
+
 
     suspend fun register(registerRequest: RegisterRequest): Response<RegisterResponse> {
         return apiService.postRegister(
@@ -17,10 +18,21 @@ class AuthRepository(private val apiService: ApiService) {
             address = registerRequest.address
         )
     }
+
     suspend fun login(loginRequest: LoginRequest): Response<LoginResponse> {
-        return apiService.postLogin(
+        val response = apiService.postLogin(
             email = loginRequest.email,
             password = loginRequest.password
         )
+
+        if (response.isSuccessful) {
+            authPreference.saveAuthToken(response.body()?.token ?: "")
+        }
+
+        return response
+    }
+
+    fun getAuthPref(): AuthPreference { // Renamed the conflicting method
+        return authPreference
     }
 }
