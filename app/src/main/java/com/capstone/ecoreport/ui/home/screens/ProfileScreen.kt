@@ -1,4 +1,4 @@
-package com.capstone.ecoreport.ui.theme.screen
+package com.capstone.ecoreport.ui.home.screens
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background

@@ -1,4 +1,4 @@
-package com.capstone.ecoreport.ui.theme.screen
+package com.capstone.ecoreport.ui.auth
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
@@ -35,8 +35,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.capstone.ecoreport.R
 import com.capstone.ecoreport.data.api.ApiConfig
-import com.capstone.ecoreport.data.repository.UserRepository
-import com.capstone.ecoreport.ui.auth.RegisterLogic
+import com.capstone.ecoreport.data.auth.AuthRepository
 import com.capstone.ecoreport.ui.theme.EcoReportTheme
 import com.capstone.ecoreport.ui.theme.components.PasswordField
 import kotlinx.coroutines.launch
@@ -109,12 +108,12 @@ fun RegisterScreen(
             Button(
                 onClick = {
                     coroutineScope.launch {
-                        RegisterLogic.performRegistration(
+                        RegisterViewModel.performRegistration(
                             username = username,
                             email = email,
                             password = password,
                             repeatPassword = repeatPassword,
-                            userRepository = UserRepository(ApiConfig.createApiService()),
+                            authRepository = AuthRepository(ApiConfig.createApiService()),
                             onRegisterSuccess = {
                                 onRegisterSuccess() // Panggil callback jika registrasi berhasil
                             },

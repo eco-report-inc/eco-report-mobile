@@ -9,10 +9,10 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import com.capstone.ecoreport.ui.theme.EcoReportTheme
-import com.capstone.ecoreport.ui.theme.screen.CreateForm
-import com.capstone.ecoreport.ui.theme.screen.LoginScreen
-import com.capstone.ecoreport.ui.theme.screen.ProfileScreen
-import com.capstone.ecoreport.ui.theme.screen.RegisterScreen
+import com.capstone.ecoreport.ui.report.CreateForm
+import com.capstone.ecoreport.ui.auth.LoginScreen
+import com.capstone.ecoreport.ui.home.screens.ProfileScreen
+import com.capstone.ecoreport.ui.auth.RegisterScreen
 
 
 class MainActivity : ComponentActivity() {
