@@ -91,4 +91,10 @@ dependencies {
     implementation ("org.tensorflow:tensorflow-lite-gpu:2.9.0")
     implementation ("org.tensorflow:tensorflow-lite:2.9.0")
     implementation ("org.tensorflow:tensorflow-lite-support:0.4.4")
+    // CameraX LifeCycle
+    implementation ("androidx.camera:camera-camera2:1.2.1")
+    implementation ("androidx.camera:camera-lifecycle:1.2.1")
+    // CameraX Preview
+    implementation ("androidx.camera:camera-view:1.2.0-alpha03")
+    implementation ("androidx.camera:camera-core:1.2.0-alpha03")
 }
