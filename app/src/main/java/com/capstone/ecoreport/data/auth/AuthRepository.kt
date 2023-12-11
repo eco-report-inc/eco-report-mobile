@@ -9,7 +9,6 @@ import retrofit2.Response
 
 class AuthRepository(private val apiService: ApiService, private val authPreference: AuthPreference) {
 
-
     suspend fun register(registerRequest: RegisterRequest): Response<RegisterResponse> {
         return apiService.postRegister(
             name = registerRequest.nama,
@@ -26,13 +25,18 @@ class AuthRepository(private val apiService: ApiService, private val authPrefere
         )
 
         if (response.isSuccessful) {
-            authPreference.saveAuthToken(response.body()?.token ?: "")
+            val token = response.body()?.token.orEmpty()
+            authPreference.saveAuthToken(token)
         }
 
         return response
     }
 
-    fun getAuthPref(): AuthPreference { // Renamed the conflicting method
+    fun getAuthPref(): AuthPreference {
         return authPreference
+    }
+
+    fun clearAuthToken() {
+        authPreference.clearAuthTokenPref()
     }
 }

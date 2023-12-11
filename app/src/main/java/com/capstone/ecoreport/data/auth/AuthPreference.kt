@@ -8,18 +8,25 @@ class AuthPreference(context: Context) {
         "AuthPreference",
         Context.MODE_PRIVATE
     )
+
+    companion object {
+        private const val AUTH_TOKEN_KEY = "auth_token"
+    }
+
     fun saveAuthToken(token: String) {
         with(sharedPreferences.edit()) {
-            putString("token", token)
-            apply() // Pastikan menggunakan apply()
+            putString(AUTH_TOKEN_KEY, token)
+            apply()
         }
     }
+
     fun getAuthToken(): String? {
-        return sharedPreferences.getString("token", null)
+        return sharedPreferences.getString(AUTH_TOKEN_KEY, null)
     }
+
     fun clearAuthTokenPref() {
         with(sharedPreferences.edit()) {
-            remove("token")
+            remove(AUTH_TOKEN_KEY)
             apply()
         }
     }

@@ -60,7 +60,6 @@ val moreOptionsList = listOf(
 
 @OptIn(
     ExperimentalComposeUiApi::class,
-    ExperimentalMaterial3Api::class
 )
 @Composable
 fun ProfileScreen() {

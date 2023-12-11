@@ -15,7 +15,7 @@ object LoginViewModel {
         email: String,
         password: String,
         authRepository: AuthRepository,
-        onLoginResponse: (Response<LoginResponse>) -> Unit,
+        onLoginSuccess: () -> Unit,
         onLoginError: (String) -> Unit,
         onLoading: (Boolean) -> Unit
     ) {
@@ -24,33 +24,21 @@ object LoginViewModel {
             val response = authRepository.login(
                 LoginRequest(email, password)
             )
-            onLoginResponse.invoke(response)
 
             if (response.isSuccessful) {
-                val token = response.body()?.token ?: ""
-                authRepository.getAuthPref().saveAuthToken(token)
+                onLoginSuccess()
             } else {
-                val errorMessage = when (response.code()) {
-                    401 -> "Invalid credentials. Please check your email and password."
-                    404 -> "User not found. Please check your email."
-                    else -> "Login failed. ${response.message()}"
-                }
-                Log.e(TAG, errorMessage)
-                onLoginError.invoke(errorMessage)
+                onLoginError("Login failed. Please try again.")
             }
-        } catch (e: IOException) {
-            val errorMessage = "Network error. Please check your internet connection."
-            Log.e(TAG, errorMessage, e)
-            onLoginError.invoke(errorMessage)
         } catch (e: Exception) {
             val errorMessage = "An unexpected error occurred during login."
-            Log.e(TAG, errorMessage, e)
-            onLoginError.invoke(errorMessage)
+            onLoginError(errorMessage)
         } finally {
             onLoading(false)
         }
     }
 }
+
     object RegisterViewModel {
     private const val TAG = "RegisterViewModel"
 

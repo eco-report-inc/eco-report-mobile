@@ -15,6 +15,8 @@ import com.capstone.ecoreport.ui.report.CreateForm
 import com.capstone.ecoreport.ui.auth.LoginScreen
 import com.capstone.ecoreport.ui.home.screens.ProfileScreen
 import com.capstone.ecoreport.ui.auth.RegisterScreen
+import com.capstone.ecoreport.ui.home.screens.HomeScreen
+import com.capstone.ecoreport.ui.home.screens.MapsScreen
 
 class MainActivity : ComponentActivity() {
     private lateinit var authManager: AuthManager
@@ -48,7 +50,7 @@ fun AppNavigation(authManager: AuthManager) {
             currentScreen = Screen.Login
         } else if (authManager.isLoggedIn()) {
             // Login berhasil dan token ada, arahkan ke layar profil
-            currentScreen = Screen.ProfileScreen
+            currentScreen = Screen.HomeScreen
         }
     }
     when (currentScreen) {
@@ -59,7 +61,7 @@ fun AppNavigation(authManager: AuthManager) {
                     currentScreen = Screen.Register
                 },
                 onLoginSuccess = {
-                    currentScreen = Screen.ProfileScreen
+                    currentScreen = Screen.HomeScreen
                 },
                 onLoginError = { error ->
                     // Handle login error, if needed
@@ -87,6 +89,19 @@ fun AppNavigation(authManager: AuthManager) {
         Screen.ProfileScreen -> {
             ProfileScreen()
         }
+        Screen.HomeScreen -> {
+            HomeScreen(
+                onProfileClicked = {
+                    currentScreen = Screen.ProfileScreen
+                },
+                onMapClicked = {
+                    currentScreen = Screen.MapsScreen
+                }
+            )
+        }
+        Screen.MapsScreen -> {
+            MapsScreen()
+        }
     }
 }
 
@@ -95,7 +110,9 @@ enum class Screen {
     Login,
     Register,
     CreateForm,
-    ProfileScreen
+    ProfileScreen,
+    HomeScreen,
+    MapsScreen
 }
 
 @Composable

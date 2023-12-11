@@ -53,6 +53,7 @@ fun LoginScreen(
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
     val coroutineScope = rememberCoroutineScope()
+    val context = LocalContext.current
     Box(
         modifier = Modifier
             .fillMaxSize()
@@ -91,15 +92,12 @@ fun LoginScreen(
                             email = email,
                             password = password,
                             authRepository = authRepository,
-                            onLoginResponse = { response ->
-                                if (response.isSuccessful) {
-                                    authRepository.getAuthPref().saveAuthToken(response.body()?.token ?: "")
-                                    onLoginSuccess()
-                                } else {
-                                    onLoginError("Login failed. Please try again.")
-                                }
+                            onLoginSuccess = {
+                                onLoginSuccess()
                             },
-                            onLoginError = { error -> onLoginError(error) },
+                            onLoginError = { error ->
+                                onLoginError(error)
+                            },
                             onLoading = { loading = it }
                         )
                     }
