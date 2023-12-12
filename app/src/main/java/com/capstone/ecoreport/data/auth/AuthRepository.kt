@@ -5,9 +5,10 @@ import com.capstone.ecoreport.data.models.LoginRequest
 import com.capstone.ecoreport.data.models.LoginResponse
 import com.capstone.ecoreport.data.models.RegisterRequest
 import com.capstone.ecoreport.data.models.RegisterResponse
+import com.capstone.ecoreport.ui.auth.AuthManager
 import retrofit2.Response
 
-class AuthRepository(private val apiService: ApiService, private val authPreference: AuthPreference) {
+class AuthRepository(private val apiService: ApiService, private val authManager: AuthManager) {
 
     suspend fun register(registerRequest: RegisterRequest): Response<RegisterResponse> {
         return apiService.postRegister(
@@ -26,17 +27,9 @@ class AuthRepository(private val apiService: ApiService, private val authPrefere
 
         if (response.isSuccessful) {
             val token = response.body()?.token.orEmpty()
-            authPreference.saveAuthToken(token)
+            authManager.saveAuthToken(token)
         }
 
         return response
-    }
-
-    fun getAuthPref(): AuthPreference {
-        return authPreference
-    }
-
-    fun clearAuthToken() {
-        authPreference.clearAuthTokenPref()
     }
 }

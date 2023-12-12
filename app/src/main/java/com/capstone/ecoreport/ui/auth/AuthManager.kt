@@ -13,9 +13,19 @@ class AuthManager(context: Context) {
     fun getAuthToken(): String? {
         return prefs.getString("token", null)
     }
+
+    fun saveAuthToken(token: String) {
+        with(prefs.edit()) {
+            putString("token", token)
+            putBoolean("isLoggedIn", true)
+            apply()
+        }
+    }
+
     fun clearAuthToken() {
         with(prefs.edit()) {
             remove("token")
+            putBoolean("isLoggedIn", false)
             apply()
         }
     }

@@ -10,7 +10,7 @@ class AuthPreference(context: Context) {
     )
 
     companion object {
-        private const val AUTH_TOKEN_KEY = "auth_token"
+        private const val AUTH_TOKEN_KEY = "token"
     }
 
     fun saveAuthToken(token: String) {

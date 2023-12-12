@@ -40,9 +40,11 @@ import com.capstone.ecoreport.Screen
 import com.capstone.ecoreport.data.api.ApiConfig
 import com.capstone.ecoreport.data.auth.AuthPreference
 import com.capstone.ecoreport.data.auth.AuthRepository
+import com.capstone.ecoreport.data.models.RegisterRequest
 import com.capstone.ecoreport.ui.theme.EcoReportTheme
 import com.capstone.ecoreport.ui.theme.components.PasswordField
 import kotlinx.coroutines.launch
+import com.capstone.ecoreport.ui.auth.AuthManager
 
 
 @Composable
@@ -50,7 +52,8 @@ fun RegisterScreen(
     context: Context,
     onLoginClicked: () -> Unit,
     onRegisterSuccess: () -> Unit,
-    onRegisterError: (String) -> Unit
+    onRegisterError: (String) -> Unit,
+    authManager: AuthManager
 ) {
     var username by remember { mutableStateOf("") }
     var email by remember { mutableStateOf("") }
@@ -114,20 +117,15 @@ fun RegisterScreen(
             Button(
                 onClick = {
                     coroutineScope.launch {
-                        val authRepository = AuthRepository(ApiConfig.createApiService(context), AuthPreference(context))
-                        RegisterViewModel.performRegistration(
-                            username = username,
-                            email = email,
-                            password = password,
-                            repeatPassword = repeatPassword,
-                            authRepository = authRepository,
-                            onRegisterSuccess = {
-                                onRegisterSuccess()
-                                currentScreen = Screen.Login
-                            },
-                            onRegisterError = { error -> onRegisterError(error) },
-                            onLoading = { loading = it }
-                        )
+                        val authRepository = AuthRepository(ApiConfig.getApiService(context), authManager)
+                        val response = authRepository.register(RegisterRequest(username, email, password, repeatPassword))
+
+                        if (response.isSuccessful) {
+                            onRegisterSuccess()
+                            currentScreen = Screen.Login
+                        } else {
+                            onRegisterError("Registration failed. Please try again.")
+                        }
                     }
                 },
                 shape = RoundedCornerShape(
@@ -193,13 +191,14 @@ fun RegisterScreen(
 @Preview(showBackground = true)
 @Composable
 fun RegisterScreenPreview() {
-    val context = LocalContext.current
+    val authManager = AuthManager(LocalContext.current)
     EcoReportTheme {
         RegisterScreen(
-            context = context,
+            context = LocalContext.current,
             onLoginClicked = {},
             onRegisterSuccess = {},
-            onRegisterError = {}
+            onRegisterError = {},
+            authManager = authManager
         )
     }
 }

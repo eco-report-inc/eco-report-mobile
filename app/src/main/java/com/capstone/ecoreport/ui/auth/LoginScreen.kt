@@ -39,6 +39,7 @@ import com.capstone.ecoreport.R
 import com.capstone.ecoreport.data.api.ApiConfig
 import com.capstone.ecoreport.data.auth.AuthPreference
 import com.capstone.ecoreport.data.auth.AuthRepository
+import com.capstone.ecoreport.data.models.LoginRequest
 import com.capstone.ecoreport.ui.theme.EcoReportTheme
 import com.capstone.ecoreport.ui.theme.components.PasswordField
 import kotlinx.coroutines.launch
@@ -48,7 +49,8 @@ fun LoginScreen(
     context: Context,
     onRegisterClicked: () -> Unit,
     onLoginSuccess: () -> Unit,
-    onLoginError: (String) -> Unit
+    onLoginError: (String) -> Unit,
+    authManager: AuthManager
 ) {
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
@@ -87,19 +89,14 @@ fun LoginScreen(
             Button(
                 onClick = {
                     coroutineScope.launch {
-                        val authRepository = AuthRepository(ApiConfig.createApiService(context), AuthPreference(context))
-                        LoginViewModel.performLogin(
-                            email = email,
-                            password = password,
-                            authRepository = authRepository,
-                            onLoginSuccess = {
-                                onLoginSuccess()
-                            },
-                            onLoginError = { error ->
-                                onLoginError(error)
-                            },
-                            onLoading = { loading = it }
-                        )
+                        val authRepository = AuthRepository(ApiConfig.getApiService(context), authManager)
+                        val response = authRepository.login(LoginRequest(email, password))
+
+                        if (response.isSuccessful) {
+                            onLoginSuccess()
+                        } else {
+                            onLoginError("Login failed. Please try again.")
+                        }
                     }
                 },
                 shape = RoundedCornerShape(16.dp),
@@ -162,12 +159,15 @@ fun LoginScreen(
     )
 @Composable
 fun LoginScreenPreview() {
+    val authManager = AuthManager(LocalContext.current)
+
     EcoReportTheme {
         LoginScreen(
             context = LocalContext.current,
             onRegisterClicked = {},
             onLoginSuccess = {},
-            onLoginError = {}
+            onLoginError = {},
+            authManager = authManager
         )
     }
 }

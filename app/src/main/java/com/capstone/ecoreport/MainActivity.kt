@@ -45,11 +45,9 @@ fun AppNavigation(authManager: AuthManager) {
 
     LaunchedEffect(authManager.isLoggedIn()) {
         if (authManager.isLoggedIn() && authManager.getAuthToken().isNullOrEmpty()) {
-            // Token tidak valid atau tidak ada, lakukan logout dan tampilkan layar login
             authManager.clearAuthToken()
             currentScreen = Screen.Login
         } else if (authManager.isLoggedIn()) {
-            // Login berhasil dan token ada, arahkan ke layar profil
             currentScreen = Screen.HomeScreen
         }
     }
@@ -65,7 +63,8 @@ fun AppNavigation(authManager: AuthManager) {
                 },
                 onLoginError = { error ->
                     // Handle login error, if needed
-                }
+                },
+                authManager = AuthManager(LocalContext.current)
             )
         }
         Screen.Register -> {
@@ -80,7 +79,8 @@ fun AppNavigation(authManager: AuthManager) {
                 },
                 onRegisterError = { error ->
                     // Handle registration error, if needed
-                }
+                },
+                authManager = AuthManager(LocalContext.current)
             )
         }
         Screen.CreateForm -> {
