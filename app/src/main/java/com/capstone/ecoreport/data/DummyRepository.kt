@@ -2,6 +2,8 @@ package com.capstone.ecoreport.data
 
 import com.capstone.ecoreport.model.Dummy
 import com.capstone.ecoreport.model.DummyData
+import kotlinx.coroutines.flow.flow
+import java.util.concurrent.Flow
 
 class DummyRepository {
 
@@ -19,6 +21,13 @@ class DummyRepository {
         return dummy.first {
             it.id == dummyId
         }
+    }
+
+    fun searchDummy(query: String) = flow {
+        val data = dummy.filter {
+            it.username.contains(query, ignoreCase = true)
+        }
+        emit(data)
     }
 
     companion object {
