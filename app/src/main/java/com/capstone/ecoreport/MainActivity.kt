@@ -62,7 +62,6 @@ fun AppNavigation(authManager: AuthManager) {
                     currentScreen = Screen.HomeScreen
                 },
                 onLoginError = { error ->
-                    // Handle login error, if needed
                 },
                 authManager = AuthManager(LocalContext.current)
             )
@@ -74,11 +73,9 @@ fun AppNavigation(authManager: AuthManager) {
                     currentScreen = Screen.Login
                 },
                 onRegisterSuccess = {
-                    // Handle registration success
                     currentScreen = Screen.Login
                 },
                 onRegisterError = { error ->
-                    // Handle registration error, if needed
                 },
                 authManager = AuthManager(LocalContext.current)
             )
@@ -104,8 +101,6 @@ fun AppNavigation(authManager: AuthManager) {
         }
     }
 }
-
-
 enum class Screen {
     Login,
     Register,
