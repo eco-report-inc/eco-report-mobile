@@ -1,4 +1,6 @@
 <resources>
     <string name="app_name">EcoReport</string>
     <string name="more_options">Opsi Tambahan</string>
+    <string name="search_user">Cari nama user disini</string>
+    <string name="empty_data">Data Kosong</string>
 </resources>
