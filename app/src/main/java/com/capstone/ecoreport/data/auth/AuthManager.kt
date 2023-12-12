@@ -1,4 +1,4 @@
-package com.capstone.ecoreport.ui.auth
+package com.capstone.ecoreport.data.auth
 
 import android.content.Context
 import android.content.SharedPreferences
@@ -21,7 +21,6 @@ class AuthManager(context: Context) {
             apply()
         }
     }
-
     fun clearAuthToken() {
         with(prefs.edit()) {
             remove("token")

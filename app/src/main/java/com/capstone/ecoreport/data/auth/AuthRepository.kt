@@ -5,7 +5,6 @@ import com.capstone.ecoreport.data.models.LoginRequest
 import com.capstone.ecoreport.data.models.LoginResponse
 import com.capstone.ecoreport.data.models.RegisterRequest
 import com.capstone.ecoreport.data.models.RegisterResponse
-import com.capstone.ecoreport.ui.auth.AuthManager
 import retrofit2.Response
 
 class AuthRepository(private val apiService: ApiService, private val authManager: AuthManager) {

@@ -38,13 +38,12 @@ import androidx.compose.ui.unit.dp
 import com.capstone.ecoreport.R
 import com.capstone.ecoreport.Screen
 import com.capstone.ecoreport.data.api.ApiConfig
-import com.capstone.ecoreport.data.auth.AuthPreference
+import com.capstone.ecoreport.data.auth.AuthManager
 import com.capstone.ecoreport.data.auth.AuthRepository
 import com.capstone.ecoreport.data.models.RegisterRequest
 import com.capstone.ecoreport.ui.theme.EcoReportTheme
 import com.capstone.ecoreport.ui.theme.components.PasswordField
 import kotlinx.coroutines.launch
-import com.capstone.ecoreport.ui.auth.AuthManager
 
 
 @Composable

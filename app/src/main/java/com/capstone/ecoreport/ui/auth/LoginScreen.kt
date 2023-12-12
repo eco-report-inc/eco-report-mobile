@@ -1,7 +1,6 @@
 package com.capstone.ecoreport.ui.auth
 
 import android.content.Context
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -37,7 +36,7 @@ import androidx.compose.ui.tooling.preview.Wallpapers
 import androidx.compose.ui.unit.dp
 import com.capstone.ecoreport.R
 import com.capstone.ecoreport.data.api.ApiConfig
-import com.capstone.ecoreport.data.auth.AuthPreference
+import com.capstone.ecoreport.data.auth.AuthManager
 import com.capstone.ecoreport.data.auth.AuthRepository
 import com.capstone.ecoreport.data.models.LoginRequest
 import com.capstone.ecoreport.ui.theme.EcoReportTheme

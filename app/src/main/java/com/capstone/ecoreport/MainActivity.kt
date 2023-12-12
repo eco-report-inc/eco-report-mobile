@@ -9,7 +9,7 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
-import com.capstone.ecoreport.ui.auth.AuthManager
+import com.capstone.ecoreport.data.auth.AuthManager
 import com.capstone.ecoreport.ui.theme.EcoReportTheme
 import com.capstone.ecoreport.ui.report.CreateForm
 import com.capstone.ecoreport.ui.auth.LoginScreen
