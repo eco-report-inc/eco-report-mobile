@@ -1,4 +1,4 @@
-package com.capstone.ecoreport.ui.theme.components
+package com.capstone.ecoreport.ui.components
 
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons

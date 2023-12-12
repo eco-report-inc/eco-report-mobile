@@ -1,4 +1,4 @@
-package com.capstone.ecoreport.ui.theme.screen
+package com.capstone.ecoreport.ui.screen
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column

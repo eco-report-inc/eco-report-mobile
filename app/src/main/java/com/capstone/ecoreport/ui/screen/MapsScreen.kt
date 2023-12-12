@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-package com.capstone.ecoreport.ui.theme.screen
+package com.capstone.ecoreport.ui.screen
 
 import android.os.Bundle
 import android.util.Log

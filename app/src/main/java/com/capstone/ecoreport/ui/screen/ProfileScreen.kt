@@ -1,4 +1,4 @@
-package com.capstone.ecoreport.ui.theme.screen
+package com.capstone.ecoreport.ui.screen
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -26,17 +26,14 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
-import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
@@ -50,12 +47,11 @@ import androidx.compose.ui.semantics.testTagsAsResourceId
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.Wallpapers
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.window.DialogProperties
 import com.capstone.ecoreport.R
 import com.capstone.ecoreport.data.FeatureList
 import com.capstone.ecoreport.ui.theme.EcoReportTheme
-import com.capstone.ecoreport.ui.theme.components.DCodeIcon
-import com.capstone.ecoreport.ui.theme.components.MyIcons
+import com.capstone.ecoreport.ui.components.DCodeIcon
+import com.capstone.ecoreport.ui.components.MyIcons
 
 val moreOptionsList = listOf(
     FeatureList("Edit Profil", DCodeIcon.ImageVectorIcon(MyIcons.Edit)),

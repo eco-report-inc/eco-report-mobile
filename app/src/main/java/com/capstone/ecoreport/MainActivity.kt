@@ -3,23 +3,16 @@ package com.capstone.ecoreport
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import com.capstone.ecoreport.ui.theme.EcoReportTheme
-import com.capstone.ecoreport.ui.theme.screen.CreateFormScreen
-import com.capstone.ecoreport.ui.theme.screen.EditProfileScreen
-import com.capstone.ecoreport.ui.theme.screen.LoginScreen
-import com.capstone.ecoreport.ui.theme.screen.MapsScreen
-import com.capstone.ecoreport.ui.theme.screen.ProfileScreen
-import com.capstone.ecoreport.ui.theme.screen.RegisterScreen
-import kotlinx.coroutines.launch
+import com.capstone.ecoreport.ui.screen.CreateFormScreen
+import com.capstone.ecoreport.ui.screen.LoginScreen
+import com.capstone.ecoreport.ui.screen.MapsScreen
+import com.capstone.ecoreport.ui.screen.RegisterScreen
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {

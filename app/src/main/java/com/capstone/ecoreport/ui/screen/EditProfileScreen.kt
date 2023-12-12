@@ -1,4 +1,4 @@
-package com.capstone.ecoreport.ui.theme.screen
+package com.capstone.ecoreport.ui.screen
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.border
@@ -36,9 +36,9 @@ import androidx.compose.ui.tooling.preview.Wallpapers
 import androidx.compose.ui.unit.dp
 import com.capstone.ecoreport.R
 import com.capstone.ecoreport.ui.theme.EcoReportTheme
-import com.capstone.ecoreport.ui.theme.components.EmailField
-import com.capstone.ecoreport.ui.theme.components.PasswordField
-import com.capstone.ecoreport.ui.theme.components.RepeatPasswordField
+import com.capstone.ecoreport.ui.components.EmailField
+import com.capstone.ecoreport.ui.components.PasswordField
+import com.capstone.ecoreport.ui.components.RepeatPasswordField
 
 @Composable
 fun EditProfileScreen() {
