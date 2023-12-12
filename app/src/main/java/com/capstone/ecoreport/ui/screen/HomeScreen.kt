@@ -23,6 +23,8 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.tooling.preview.Wallpapers
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -32,6 +34,7 @@ import com.capstone.ecoreport.model.Dummy
 import com.capstone.ecoreport.ui.common.UiState
 import com.capstone.ecoreport.ui.item.DummyItem
 import com.capstone.ecoreport.ui.item.EmptyList
+import com.capstone.ecoreport.ui.theme.EcoReportTheme
 import com.capstone.ecoreport.ui.viewmodel.HomeViewModel
 import com.capstone.ecoreport.ui.viewmodel.ViewModelFactory
 import java.time.temporal.TemporalQuery
@@ -135,5 +138,16 @@ fun ListDummy(
                     .clickable { navigateToDetail(item.id) }
             )
         }
+    }
+}
+
+@Preview(
+    showBackground = true,
+    wallpaper = Wallpapers.GREEN_DOMINATED_EXAMPLE
+)
+@Composable
+fun HomeScreenPreview() {
+    EcoReportTheme {
+        HomeScreen(navigateToDetail = {})
     }
 }
