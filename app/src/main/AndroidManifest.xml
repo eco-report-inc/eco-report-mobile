@@ -14,11 +14,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.EcoReport"
         tools:targetApi="31">
-
         <meta-data
             android:name="com.google.android.geo.API_KEY"
-            android:value="${MAPS_API_KEY}" />
-
+            android:value="AIzaSyC5cidp298woagRufDmsn81EMza_AFayow" />
         <activity
             android:name=".MainActivity"
             android:exported="true"
