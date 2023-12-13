@@ -1,5 +1,6 @@
 package com.capstone.ecoreport
 
+import android.util.Log
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AccountCircle
@@ -29,6 +30,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
+import com.capstone.ecoreport.data.auth.AuthManager
 import com.capstone.ecoreport.navigation.NavigationItem
 import com.capstone.ecoreport.navigation.Screen
 import com.capstone.ecoreport.ui.screen.DetailScreen
