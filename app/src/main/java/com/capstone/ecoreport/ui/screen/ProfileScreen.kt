@@ -2,6 +2,7 @@ package com.capstone.ecoreport.ui.screen
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
@@ -44,11 +45,16 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.semantics.testTagsAsResourceId
+import androidx.compose.ui.text.SpanStyle
+import androidx.compose.ui.text.buildAnnotatedString
+import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.Wallpapers
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
 import com.capstone.ecoreport.R
 import com.capstone.ecoreport.data.FeatureList
+import com.capstone.ecoreport.navigation.Screen
 import com.capstone.ecoreport.ui.theme.EcoReportTheme
 import com.capstone.ecoreport.ui.components.DCodeIcon
 import com.capstone.ecoreport.ui.components.MyIcons
@@ -63,7 +69,9 @@ val moreOptionsList = listOf(
     ExperimentalMaterial3Api::class
 )
 @Composable
-fun ProfileScreen() {
+fun ProfileScreen(
+    navController: NavController
+) {
     var isLogoutDialogVisible = remember { mutableStateOf(false) }
 
     Scaffold(
@@ -81,7 +89,11 @@ fun ProfileScreen() {
             TopProfileLayout()
             MainProfileContent()
             PointContent()
-            FooterContent()
+            FooterContent(navController = navController) {
+                moreOptionsList.forEach {
+                    MoreOptionsComp(it, navController)
+                }
+            }
             Spacer(modifier = Modifier.height(32.dp))
             LogoutButton(onLogoutClicked = { isLogoutDialogVisible.value = true })
         }
@@ -218,7 +230,7 @@ fun PointContentItem(icon: ImageVector, label: String, value: String) {
 }
 
 @Composable
-fun FooterContent() {
+fun FooterContent(navController: NavController, content: @Composable () -> Unit) {
     Surface(
         modifier = Modifier
             .fillMaxWidth()
@@ -233,9 +245,7 @@ fun FooterContent() {
                 text = stringResource(id = R.string.more_options),
                 style = MaterialTheme.typography.titleMedium,
             )
-            moreOptionsList.forEach {
-                MoreOptionsComp(it)
-            }
+            content() // Menambahkan parameter content
         }
     }
 }
@@ -310,10 +320,18 @@ fun LogoutDialog(
 @Composable
 fun MoreOptionsComp(
     featureList: FeatureList,
+    navController: NavController
 ) {
     Row(
-        modifier = Modifier.padding(5.dp),
-        verticalAlignment = Alignment.CenterVertically,
+        modifier = Modifier
+            .padding(8.dp)
+            .fillMaxWidth()
+            .clickable {
+            when (featureList.name) {
+                "Edit Profil" -> navController.navigate(Screen.EditProfile.route)
+                // ... (Tambahkan case lain sesuai kebutuhan)
+            }
+        }
     ) {
         when (featureList.listIcon) {
             is DCodeIcon.ImageVectorIcon -> Icon(
@@ -332,14 +350,14 @@ fun MoreOptionsComp(
                     .padding(6.dp)
             )
         }
+        Spacer(modifier = Modifier.width(8.dp))
         Column(
             modifier = Modifier
-                .padding(horizontal = 4.dp)
                 .weight(1f)
+                .align(Alignment.CenterVertically)
         ) {
             Text(
-                text = featureList.name,
-                style = MaterialTheme.typography.labelLarge
+                text = featureList.name
             )
         }
         Icon(
@@ -347,17 +365,5 @@ fun MoreOptionsComp(
             contentDescription = null,
             modifier = Modifier.padding(4.dp)
         )
-    }
-}
-
-
-@Preview(
-    showBackground = true,
-    wallpaper = Wallpapers.GREEN_DOMINATED_EXAMPLE
-)
-@Composable
-fun ProfileScreenPreview() {
-    EcoReportTheme {
-        ProfileScreen()
     }
 }

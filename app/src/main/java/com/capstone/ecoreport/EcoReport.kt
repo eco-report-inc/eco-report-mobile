@@ -32,6 +32,7 @@ import androidx.navigation.navArgument
 import com.capstone.ecoreport.navigation.NavigationItem
 import com.capstone.ecoreport.navigation.Screen
 import com.capstone.ecoreport.ui.screen.DetailScreen
+import com.capstone.ecoreport.ui.screen.EditProfileScreen
 import com.capstone.ecoreport.ui.screen.HomeScreen
 import com.capstone.ecoreport.ui.screen.MapsScreen
 import com.capstone.ecoreport.ui.screen.ProfileScreen
@@ -68,7 +69,7 @@ fun EcoReport(
                 MapsScreen()
             }
             composable(Screen.Profile.route) {
-                ProfileScreen()
+                ProfileScreen(navController = navController)
             }
             composable(
                 route = Screen.Detail.route,
@@ -83,6 +84,9 @@ fun EcoReport(
                         navController.navigateUp()
                     }
                 )
+            }
+            composable(Screen.EditProfile.route) {
+                EditProfileScreen()
             }
         }
     }
