@@ -93,6 +93,9 @@ dependencies {
     debugImplementation("androidx.compose.ui:ui-tooling")
     debugImplementation("androidx.compose.ui:ui-test-manifest")
 
+    implementation ("androidx.lifecycle:lifecycle-viewmodel-ktx:2.5.1")
+    implementation ("androidx.lifecycle:lifecycle-livedata-ktx:2.5.1")
+
     implementation ("org.tensorflow:tensorflow-lite-task-vision:0.4.0")
     // Import the GPU delegate plugin Library for GPU inference
     implementation ("org.tensorflow:tensorflow-lite-gpu-delegate-plugin:0.4.0")
