@@ -17,18 +17,15 @@ class AuthRepository(private val apiService: ApiService, private val authManager
             address = registerRequest.address
         )
     }
-
     suspend fun login(loginRequest: LoginRequest): Response<LoginResponse> {
         val response = apiService.postLogin(
             email = loginRequest.email,
             password = loginRequest.password
         )
-
         if (response.isSuccessful) {
             val token = response.body()?.token.orEmpty()
             authManager.saveAuthToken(token)
         }
-
         return response
     }
 }

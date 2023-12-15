@@ -33,6 +33,9 @@ data class LoginResponse(
     @SerializedName("token")
     val token: String
 )
-
+data class UploadPhotoResponse(
+    @SerializedName("message")
+    val message: String,
+)
 
 

@@ -98,9 +98,17 @@ fun HomeContent(
                 .heightIn(min = 48.dp)
         ) {
 
-
         }
-    }
+        if (listDummy.isNotEmpty()) {
+            ListDummy(
+                listDummy = listDummy,
+                navigateToDetail = navigateToDetail,
+            )
+        } else {
+            EmptyList(
+                warning = stringResource(R.string.empty_data),
+            )
+        }}
 }
 
 @OptIn(ExperimentalFoundationApi::class)
