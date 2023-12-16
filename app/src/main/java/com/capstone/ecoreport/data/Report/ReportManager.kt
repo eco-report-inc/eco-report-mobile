@@ -24,6 +24,5 @@ class ReportManager(private val apiService: ApiService) {
     suspend fun getAllReportsWithQuery(longitude: String, latitude: String): Response<ReportResponse> {
         return apiService.getAllReportsWithQuery(longitude, latitude)
     }
-
 }
 

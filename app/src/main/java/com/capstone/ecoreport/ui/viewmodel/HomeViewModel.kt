@@ -34,3 +34,33 @@ class HomeViewModel(private val repository: DummyRepository) : ViewModel() {
             }
     }
 }
+//Bisa menggunakan ini HomeViewModel atau langsung dari ReportViewModel
+/*// ViewModel untuk tampilan utama (Home)
+class HomeViewModel(private val repository: ReportRepository) : ViewModel() {
+
+    // State untuk UI, menggunakan Flow untuk pemantauan perubahan
+    private val _uiState: MutableStateFlow<UiState<List<ReportData>>> =
+        MutableStateFlow(UiState.Loading)
+
+    // Exposed StateFlow agar dapat diakses oleh komponen lain
+    val uiState: StateFlow<UiState<List<ReportData>>> get() = _uiState
+
+    // Pencarian berdasarkan query
+    private val _query = mutableStateOf("")
+
+    // Exposed State untuk query agar dapat diakses oleh komponen lain
+    val query: State<String> get() = _query
+
+    // Fungsi untuk melakukan pencarian
+    fun search(newQuery: String) = viewModelScope.launch {
+        _query.value = newQuery
+        repository.getAllReportsWithQuery(_query.value)
+            .catch {
+                _uiState.value = UiState.Error(it.message.toString())
+            }
+            .collect {
+                _uiState.value = UiState.Success(it)
+            }
+    }
+}
+*/
