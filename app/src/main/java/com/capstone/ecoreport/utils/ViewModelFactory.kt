@@ -1,6 +1,6 @@
 package com.capstone.ecoreport.ui.viewmodel
 
-import androidx.lifecycle.ViewModel
+/*import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.capstone.ecoreport.data.Report.ReportRepository
 import com.capstone.ecoreport.data.auth.AuthRepository
@@ -28,3 +28,4 @@ class ModelFactory(
         }
     }
 }
+ */
