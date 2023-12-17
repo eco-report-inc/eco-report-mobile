@@ -35,4 +35,55 @@ class MainActivity : ComponentActivity() {
     }
 }
 
+@Composable
+fun EcoNavigation(authManager: AuthManager) {
+    var currentScreen by remember { mutableStateOf(Screen.Login) }
+
+    LaunchedEffect(authManager.isLoggedIn()) {
+        if (authManager.isLoggedIn() && authManager.getAuthToken().isNullOrEmpty()) {
+            authManager.clearAuthToken()
+            currentScreen = Screen.Login
+        } else if (authManager.isLoggedIn()) {
+            currentScreen = Screen.HomeScreen
+        }
+    }
+    when (currentScreen) {
+        Screen.Login -> {
+            LoginScreen(
+                onRegisterClicked = {
+                    currentScreen = Screen.Register
+                },
+                onLoginSuccess = {
+                    currentScreen = Screen.HomeScreen
+                },
+                onLoginError = { error ->
+                },
+                authManager = AuthManager(LocalContext.current)
+            )
+        }
+        Screen.Register -> {
+            RegisterScreen(
+                context = LocalContext.current,
+                onLoginClicked = {
+                    currentScreen = Screen.Login
+                },
+                onRegisterSuccess = {
+                    currentScreen = Screen.Login
+                },
+                onRegisterError = { error ->
+                },
+                authManager = AuthManager(LocalContext.current)
+            )
+        }
+        Screen.HomeScreen -> {
+            HomeScreen(navigateToDetail = {})
+        }
+    }
+}
+enum class Screen {
+    Login,
+    Register,
+    HomeScreen,
+}
+
 
