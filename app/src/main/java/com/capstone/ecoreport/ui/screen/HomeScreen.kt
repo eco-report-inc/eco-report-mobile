@@ -37,6 +37,7 @@ import com.capstone.ecoreport.ui.item.EmptyList
 import com.capstone.ecoreport.ui.theme.EcoReportTheme
 import com.capstone.ecoreport.ui.viewmodel.HomeViewModel
 import com.capstone.ecoreport.ui.viewmodel.ViewModelFactory
+import java.time.temporal.TemporalQuery
 
 @Composable
 fun HomeScreen(
@@ -108,7 +109,8 @@ fun HomeContent(
             EmptyList(
                 warning = stringResource(R.string.empty_data),
             )
-        }}
+        }
+    }
 }
 
 @OptIn(ExperimentalFoundationApi::class)

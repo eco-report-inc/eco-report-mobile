@@ -30,7 +30,6 @@ data class ReportData(
     @SerializedName("Image")
     val images: List<ImageResponse>
 )
-
 data class ReportResponse(
     @SerializedName("message")
     val message: String,

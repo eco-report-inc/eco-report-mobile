@@ -37,7 +37,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.Wallpapers
 import androidx.compose.ui.unit.dp
 import com.capstone.ecoreport.R
-import com.capstone.ecoreport.Screen
 import com.capstone.ecoreport.data.api.ApiConfig
 import com.capstone.ecoreport.data.auth.AuthManager
 import com.capstone.ecoreport.data.auth.AuthRepository
@@ -60,7 +59,6 @@ fun RegisterScreen(
     var password by remember { mutableStateOf("") }
     var repeatPassword by remember { mutableStateOf("") }
     val coroutineScope = rememberCoroutineScope()
-    var currentScreen by remember { mutableStateOf(Screen.Login) }
 
 
     Box(
@@ -122,7 +120,6 @@ fun RegisterScreen(
 
                         if (response.isSuccessful) {
                             onRegisterSuccess()
-                            currentScreen = Screen.Login
                         } else {
                             onRegisterError("Registration failed. Please try again.")
                         }
