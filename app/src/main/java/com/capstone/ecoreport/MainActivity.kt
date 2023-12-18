@@ -28,7 +28,6 @@ class MainActivity : ComponentActivity() {
                     color = MaterialTheme.colorScheme.background
                 ) {
                     EcoReport()
-                    EcoNavigation(authManager)
                 }
             }
         }

@@ -18,6 +18,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.navigation.NavController
@@ -29,13 +30,16 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
+import com.capstone.ecoreport.data.auth.AuthManager
 import com.capstone.ecoreport.navigation.NavigationItem
 import com.capstone.ecoreport.navigation.Screen
 import com.capstone.ecoreport.ui.screen.DetailScreen
 import com.capstone.ecoreport.ui.screen.EditProfileScreen
 import com.capstone.ecoreport.ui.screen.HomeScreen
+import com.capstone.ecoreport.ui.screen.LoginScreen
 import com.capstone.ecoreport.ui.screen.MapsScreen
 import com.capstone.ecoreport.ui.screen.ProfileScreen
+import com.capstone.ecoreport.ui.screen.RegisterScreen
 
 @Composable
 fun EcoReport(
@@ -55,22 +59,56 @@ fun EcoReport(
     ) { innerPadding ->
         NavHost(
             navController = navController,
-            startDestination = Screen.Home.route,
+            startDestination = Screen.Login.route,
             modifier = Modifier.padding(innerPadding)
         ) {
-            composable(Screen.Home.route) {
+            composable(Screen.Login.route) {
+                LoginScreen(
+                    onRegisterClicked = {
+                        navController.navigate(Screen.Register.route)
+                    },
+                    onLoginSuccess = {
+                        navController.navigate("login/homeScreen")
+                    },
+                    onLoginError = { error ->
+                        // Handle login error
+                    },
+                    authManager = AuthManager(LocalContext.current)
+                )
+            }
+
+            composable(Screen.Register.route) {
+                RegisterScreen(
+                    context = LocalContext.current,
+                    onLoginClicked = {
+                        navController.navigate(Screen.Login.route)
+                    },
+                    onRegisterSuccess = {
+                        navController.navigate(Screen.Login.route)
+                    },
+                    onRegisterError = { error ->
+                        // Handle register error
+                    },
+                    authManager = AuthManager(LocalContext.current)
+                )
+            }
+
+            composable("login/homeScreen") {
                 HomeScreen(
                     navigateToDetail = { dummyId ->
-                        navController.navigate(Screen.Detail.createRoute(dummyId))
+                        navController.navigate("home/$dummyId")
                     }
                 )
             }
+
             composable(Screen.Maps.route) {
                 MapsScreen()
             }
+
             composable(Screen.Profile.route) {
                 ProfileScreen(navController = navController)
             }
+
             composable(
                 route = Screen.Detail.route,
                 arguments = listOf(
@@ -85,6 +123,7 @@ fun EcoReport(
                     }
                 )
             }
+
             composable(Screen.EditProfile.route) {
                 EditProfileScreen()
             }

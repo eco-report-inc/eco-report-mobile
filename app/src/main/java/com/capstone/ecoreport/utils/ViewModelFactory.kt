@@ -1,4 +1,4 @@
-package com.capstone.ecoreport.ui.viewmodel
+/*package com.capstone.ecoreport.ui.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
@@ -28,3 +28,5 @@ class ModelFactory(
         }
     }
 }
+
+ */
