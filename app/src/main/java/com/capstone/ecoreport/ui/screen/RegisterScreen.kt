@@ -37,7 +37,11 @@ import com.capstone.ecoreport.ui.components.EmailFieldWithIcon
 import com.capstone.ecoreport.ui.components.PasswordField
 
 @Composable
-fun RegisterScreen(onRegisterClicked: () -> Unit) {
+fun RegisterScreen(
+    onRegisterClicked: () -> Unit,
+    onRegisterClickedWithGoogle: () -> Unit,
+    onLoginClicked: () -> Unit,
+) {
     var username by remember { mutableStateOf("") }
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
@@ -93,7 +97,7 @@ fun RegisterScreen(onRegisterClicked: () -> Unit) {
             )
 
             Button(
-                onClick = {},
+                onClick = { onRegisterClicked() },
                 shape = RoundedCornerShape(
                     topStart = 16.dp,
                     topEnd = 16.dp,
@@ -110,7 +114,7 @@ fun RegisterScreen(onRegisterClicked: () -> Unit) {
             Spacer(modifier = Modifier.height(4.dp))
 
             Button(
-                onClick = { /* Handle registration logic here */ },
+                onClick = { onRegisterClickedWithGoogle() },
                 shape = RoundedCornerShape(
                     topStart = 4.dp,
                     topEnd = 4.dp,
@@ -136,7 +140,7 @@ fun RegisterScreen(onRegisterClicked: () -> Unit) {
             ClickableText(
                 text = AnnotatedString("Already have an account? Login"),
                 onClick = { offset ->
-                    onRegisterClicked()
+                    onLoginClicked()
                 },
                 modifier = Modifier
                     .fillMaxWidth()
@@ -154,6 +158,10 @@ fun RegisterScreen(onRegisterClicked: () -> Unit) {
 @Composable
 fun RegisterScreenPreview() {
     EcoReportTheme {
-        RegisterScreen(onRegisterClicked = {})
+        RegisterScreen(
+            onRegisterClicked = {},
+            onRegisterClickedWithGoogle = {},
+            onLoginClicked = {},
+        )
     }
 }

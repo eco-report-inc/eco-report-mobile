@@ -39,9 +39,11 @@ import com.capstone.ecoreport.ui.screen.CameraXScreen
 import com.capstone.ecoreport.ui.screen.DetailScreen
 import com.capstone.ecoreport.ui.screen.EditProfileScreen
 import com.capstone.ecoreport.ui.screen.HomeScreen
+import com.capstone.ecoreport.ui.screen.LoginScreen
 import com.capstone.ecoreport.ui.screen.MapsScreen
 import com.capstone.ecoreport.ui.screen.NoPermissionScreen
 import com.capstone.ecoreport.ui.screen.ProfileScreen
+import com.capstone.ecoreport.ui.screen.RegisterScreen
 import com.capstone.ecoreport.ui.screen.TrashDetectionScreen
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.PermissionState
@@ -67,7 +69,7 @@ fun EcoReport(
     ) { innerPadding ->
         NavHost(
             navController = navController,
-            startDestination = Screen.Home.route,
+            startDestination = Screen.Login.route,
             modifier = Modifier.padding(innerPadding)
         ) {
             composable(Screen.Home.route) {
@@ -105,6 +107,32 @@ fun EcoReport(
             }
             composable(Screen.CameraX.route) {
                 CameraXScreen()
+            }
+            composable(Screen.Login.route) {
+                LoginScreen(
+                    onLoginClick = {
+                        navController.navigate(Screen.Home.route)
+                    },
+                    onLoginClickWithGoogle = {
+                        navController.navigate(Screen.Home.route)
+                    },
+                    onRegisterClicked = {
+                        navController.navigate(Screen.Register.route)
+                    }
+                )
+            }
+            composable(Screen.Register.route) {
+                RegisterScreen(
+                    onRegisterClicked = {
+                        navController.navigate(Screen.Login.route)
+                    },
+                    onRegisterClickedWithGoogle = {
+                        navController.navigate(Screen.Login.route)
+                    },
+                    onLoginClicked = {
+                        navController.navigate(Screen.Login.route)
+                    }
+                )
             }
         }
     }

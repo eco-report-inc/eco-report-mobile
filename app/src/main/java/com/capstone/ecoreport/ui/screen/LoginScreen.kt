@@ -35,7 +35,11 @@ import com.capstone.ecoreport.ui.theme.EcoReportTheme
 import com.capstone.ecoreport.ui.components.PasswordField
 
 @Composable
-fun LoginScreen(onRegisterClicked: () -> Unit) {
+fun LoginScreen(
+    onRegisterClicked: () -> Unit,
+    onLoginClick: () -> Unit,
+    onLoginClickWithGoogle: () -> Unit
+) {
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
 
@@ -70,7 +74,7 @@ fun LoginScreen(onRegisterClicked: () -> Unit) {
             )
 
             Button(
-                onClick = { /* Handle login logic here */ },
+                onClick = {  onLoginClick() },
                 shape = RoundedCornerShape(
                     topStart = 16.dp,
                     topEnd = 16.dp,
@@ -87,7 +91,7 @@ fun LoginScreen(onRegisterClicked: () -> Unit) {
             Spacer(modifier = Modifier.height(4.dp))
 
             Button(
-                onClick = { /* Handle registration logic here */ },
+                onClick = { onLoginClickWithGoogle() },
                 shape = RoundedCornerShape(
                     topStart = 4.dp,
                     topEnd = 4.dp,
@@ -131,6 +135,10 @@ fun LoginScreen(onRegisterClicked: () -> Unit) {
 @Composable
 fun LoginScreenPreview() {
     EcoReportTheme {
-        LoginScreen(onRegisterClicked = {})
+        LoginScreen(
+            onRegisterClicked = {},
+            onLoginClick = {},
+            onLoginClickWithGoogle = {}
+            )
     }
 }

@@ -23,7 +23,9 @@ class MainActivity : ComponentActivity() {
         val screenWithoutBottomBarList = listOf(
             Screen.Detail.route,
             Screen.CameraX.route,
-            Screen.EditProfile.route
+            Screen.EditProfile.route,
+            Screen.Login.route,
+            Screen.Register.route
         )
 
         setContent {
