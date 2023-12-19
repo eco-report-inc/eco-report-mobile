@@ -42,7 +42,6 @@ interface ApiService {
         @Part image1: MultipartBody.Part,
         @Part image2: MultipartBody.Part
     ): Response<ReportResponse>
-
     // Get All Reports
     @GET("report/report")
     suspend fun getAllReports(): Response<ReportResponse>
