@@ -41,6 +41,7 @@ import com.capstone.ecoreport.data.models.LoginRequest
 import com.capstone.ecoreport.ui.theme.EcoReportTheme
 import com.capstone.ecoreport.ui.components.PasswordField
 import com.capstone.ecoreport.ui.viewmodel.AuthViewModel
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 @Composable
@@ -82,6 +83,11 @@ fun LoginScreen(viewModel: AuthViewModel, onRegisterClicked: () -> Unit) {
             Button(
                 onClick = {
                     viewModel.login(email, password)
+                    loading = true
+                    coroutineScope.launch {
+                        delay(2000)
+                        loading = false
+                    }
                 },
                 shape = RoundedCornerShape(16.dp),
                 modifier = Modifier
@@ -148,7 +154,7 @@ fun LoginScreenPreview() {
     val apiService = ApiConfig.getApiService()
     val authManager = AuthManager(context)
     val authRepository = AuthRepository(apiService, authManager)
-    val viewModel = AuthViewModel(authRepository)
+    val viewModel = AuthViewModel(authRepository, authManager)
     val onRegisterClicked: () -> Unit = {}
     EcoReportTheme {
         LoginScreen(

@@ -180,7 +180,7 @@ fun RegisterScreenPreview() {
     val apiService = ApiConfig.getApiService()
     val authManager = AuthManager(context)
     val authRepository = AuthRepository(apiService, authManager)
-    val viewModel = AuthViewModel(authRepository)
+    val viewModel = AuthViewModel(authRepository, authManager)
     val onLoginClicked: () -> Unit = {}
     EcoReportTheme {
         RegisterScreen(
