@@ -68,7 +68,6 @@ dependencies {
     // Core
     implementation("androidx.core:core-ktx:1.12.0")
     implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.6.2")
-    implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.5.1")
     implementation("androidx.lifecycle:lifecycle-livedata-ktx:2.5.1")
     implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.6.2")
     implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.6.2")
@@ -88,11 +87,16 @@ dependencies {
     implementation("androidx.compose.material:material-icons-extended:1.5.4")
     implementation("io.coil-kt:coil-compose:2.5.0")
     implementation("androidx.navigation:navigation-compose:2.7.5")
+    implementation("androidx.appcompat:appcompat:1.6.1")
+    debugImplementation("androidx.compose.ui:ui-tooling")
+    debugImplementation("androidx.compose.ui:ui-test-manifest")
+
 
     // Maps
     implementation("com.google.maps.android:maps-compose:4.3.0")
     implementation("com.google.maps.android:maps-compose-utils:4.3.0")
     implementation("com.google.maps.android:maps-compose-widgets:4.3.0")
+    implementation("com.google.android.gms:play-services-maps:18.1.0")
 
     // Networking
     implementation("com.squareup.retrofit2:retrofit:2.9.0")
@@ -120,6 +124,7 @@ dependencies {
     implementation("androidx.camera:camera-lifecycle:1.4.0-alpha03")
     implementation("androidx.camera:camera-view:1.4.0-alpha03")
     implementation("androidx.camera:camera-extensions:1.4.0-alpha03")
+    implementation("androidx.camera:camera-core:1.3.1")
 
     ////ACCOMPANIST
     implementation("com.google.accompanist:accompanist-permissions:0.32.0")
