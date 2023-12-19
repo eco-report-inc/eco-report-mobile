@@ -3,7 +3,6 @@ package com.capstone.ecoreport.data.mlkit
 import android.content.ContentValues.TAG
 import android.util.Log
 import androidx.lifecycle.ViewModel
-import com.google.mlkit.common.model.LocalModel
 import com.google.mlkit.vision.common.InputImage
 import com.google.mlkit.vision.objects.DetectedObject
 import com.google.mlkit.vision.objects.ObjectDetection
@@ -11,7 +10,7 @@ import com.google.mlkit.vision.objects.defaults.ObjectDetectorOptions
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 
-class ObjectDetectionViewModel : ViewModel() {
+class EcoReportMlModel : ViewModel() {
 
     private val objectDetector = ObjectDetection.getClient(
         ObjectDetectorOptions.Builder()
@@ -33,8 +32,11 @@ class ObjectDetectionViewModel : ViewModel() {
                 Log.e(TAG, "Tidak Ada Sampah ${e.message}", e)
             }
     }
+
     override fun onCleared() {
         super.onCleared()
         objectDetector.close()
     }
 }
+
+
