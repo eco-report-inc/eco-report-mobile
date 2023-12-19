@@ -88,7 +88,14 @@ fun EcoReport(
                 MapsScreen()
             }
             composable(Screen.Profile.route) {
-                ProfileScreen(navController = navController)
+                ProfileScreen(
+                    navController = navController,
+                    onLogout = {
+                        // Panggil fungsi logout dari ViewModel
+                        viewModel.logout()
+                        navController.navigate(Screen.Login.route)
+                    }
+                )
             }
             composable(
                 route = Screen.Detail.route,

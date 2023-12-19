@@ -70,7 +70,8 @@ val moreOptionsList = listOf(
 )
 @Composable
 fun ProfileScreen(
-    navController: NavController
+    navController: NavController,
+    onLogout: () -> Unit
 ) {
     var isLogoutDialogVisible = remember { mutableStateOf(false) }
 
@@ -105,7 +106,8 @@ fun ProfileScreen(
                     onDismissRequest = { isLogoutDialogVisible.value = false },
                     onConfirmation = {
                         isLogoutDialogVisible.value = false
-                        println("Confirmation registered") // Add logic here to handle confirmation.
+                        onLogout()
+                        navController.navigate(Screen.Login.route)
                     },
                     dialogTitle = "Logout akun",
                     dialogText = "Apakah anda yakin untuk logout?",
