@@ -45,7 +45,12 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 @Composable
-fun LoginScreen(viewModel: AuthViewModel, onRegisterClicked: () -> Unit) {
+fun LoginScreen(
+    viewModel: AuthViewModel,
+    onLoginSuccess: () -> Unit, // Add a callback for successful login navigation
+    onLoginClickWithGoogle: () -> Unit, // Add a callback for Google login
+    onRegisterClicked: () -> Unit
+) {
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
     val coroutineScope = rememberCoroutineScope()
@@ -87,6 +92,11 @@ fun LoginScreen(viewModel: AuthViewModel, onRegisterClicked: () -> Unit) {
                     coroutineScope.launch {
                         delay(2000)
                         loading = false
+
+                        if (viewModel.isAuthenticated.value) {
+                            // Call the callback for successful login
+                            onLoginSuccess()
+                        }
                     }
                 },
                 shape = RoundedCornerShape(16.dp),
@@ -155,11 +165,14 @@ fun LoginScreenPreview() {
     val authManager = AuthManager(context)
     val authRepository = AuthRepository(apiService, authManager)
     val viewModel = AuthViewModel(authRepository, authManager)
-    val onRegisterClicked: () -> Unit = {}
+
     EcoReportTheme {
         LoginScreen(
             viewModel = viewModel,
-            onRegisterClicked = onRegisterClicked
+            onLoginSuccess = {}, // Placeholder, as the navigation callback is not used in the preview
+            onLoginClickWithGoogle = {}, // Placeholder, as the Google login callback is not used in the preview
+            onRegisterClicked = {}
         )
     }
 }
+

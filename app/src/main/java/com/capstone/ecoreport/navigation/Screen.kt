@@ -1,8 +1,6 @@
 package com.capstone.ecoreport.navigation
 
 sealed class Screen(val route: String) {
-    object Login: Screen("login")
-    object Register: Screen("register")
     object Home : Screen("home")
     object Maps : Screen("maps")
     object Profile : Screen("profile")
@@ -10,4 +8,7 @@ sealed class Screen(val route: String) {
         fun createRoute(dummyId: Int) = "home/$dummyId"
     }
     object EditProfile : Screen("editProfile")
+    object CameraX : Screen("cameraX")
+    object Register : Screen("register")
+    object Login : Screen("login")
 }

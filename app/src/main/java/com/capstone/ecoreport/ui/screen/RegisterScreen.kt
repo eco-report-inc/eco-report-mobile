@@ -51,6 +51,7 @@ import kotlinx.coroutines.launch
 fun RegisterScreen(
     viewModel: AuthViewModel,
     onLoginClicked: () -> Unit,
+    onSuccess: () -> Unit
 ) {
     var username by remember { mutableStateOf("") }
     var email by remember { mutableStateOf("") }
@@ -113,6 +114,8 @@ fun RegisterScreen(
             Button(
                 onClick = {
                     viewModel.register(username, email, password, repeatPassword)
+                    // Assuming the registration is successful, invoke the onSuccess callback
+                    onSuccess()
                 },
                 shape = RoundedCornerShape(
                     topStart = 16.dp,
@@ -185,7 +188,8 @@ fun RegisterScreenPreview() {
     EcoReportTheme {
         RegisterScreen(
             viewModel = viewModel,
-            onLoginClicked = onLoginClicked
+            onLoginClicked = onLoginClicked,
+            onSuccess = {}
         )
     }
 }

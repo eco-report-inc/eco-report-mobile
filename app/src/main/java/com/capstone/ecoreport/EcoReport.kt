@@ -1,5 +1,9 @@
+@file:OptIn(ExperimentalPermissionsApi::class)
+
 package com.capstone.ecoreport
 
+
+import android.Manifest
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AccountCircle
@@ -18,7 +22,6 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.navigation.NavController
@@ -30,28 +33,37 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
-import com.capstone.ecoreport.data.auth.AuthManager
 import com.capstone.ecoreport.navigation.NavigationItem
 import com.capstone.ecoreport.navigation.Screen
+import com.capstone.ecoreport.ui.screen.CameraXScreen
 import com.capstone.ecoreport.ui.screen.DetailScreen
 import com.capstone.ecoreport.ui.screen.EditProfileScreen
 import com.capstone.ecoreport.ui.screen.HomeScreen
 import com.capstone.ecoreport.ui.screen.LoginScreen
 import com.capstone.ecoreport.ui.screen.MapsScreen
+import com.capstone.ecoreport.ui.screen.NoPermissionScreen
 import com.capstone.ecoreport.ui.screen.ProfileScreen
 import com.capstone.ecoreport.ui.screen.RegisterScreen
+import com.capstone.ecoreport.ui.screen.TrashDetectionScreen
+import com.capstone.ecoreport.ui.viewmodel.AuthViewModel
+import com.google.accompanist.permissions.ExperimentalPermissionsApi
+import com.google.accompanist.permissions.PermissionState
+import com.google.accompanist.permissions.isGranted
+import com.google.accompanist.permissions.rememberPermissionState
 
 @Composable
 fun EcoReport(
     modifier: Modifier = Modifier,
     navController: NavHostController = rememberNavController(),
+    viewModel: AuthViewModel,
+    screenWithoutBottomBarList: List<String>
 ) {
     val navBackStackEntry by navController.currentBackStackEntryAsState()
     val currentRoute = navBackStackEntry?.destination?.route
 
     Scaffold(
         bottomBar = {
-            if (currentRoute != Screen.Detail.route) {
+            if (currentRoute !in screenWithoutBottomBarList) {
                 BottomBar(navController)
             }
         },
@@ -59,13 +71,16 @@ fun EcoReport(
     ) { innerPadding ->
         NavHost(
             navController = navController,
-            startDestination = Screen.Home.route,
+            startDestination = Screen.Login.route,
             modifier = Modifier.padding(innerPadding)
         ) {
             composable(Screen.Home.route) {
                 HomeScreen(
                     navigateToDetail = { dummyId ->
                         navController.navigate(Screen.Detail.createRoute(dummyId))
+                    },
+                    navigateToCamera = {
+                        navController.navigate(Screen.CameraX.route)
                     }
                 )
             }
@@ -73,7 +88,7 @@ fun EcoReport(
                 MapsScreen()
             }
             composable(Screen.Profile.route) {
-                ProfileScreen(navController)
+                ProfileScreen(navController = navController)
             }
             composable(
                 route = Screen.Detail.route,
@@ -86,6 +101,38 @@ fun EcoReport(
                     dummyId = id,
                     navigateBack = {
                         navController.navigateUp()
+                    }
+                )
+            }
+            composable(Screen.EditProfile.route) {
+                EditProfileScreen()
+            }
+            composable(Screen.CameraX.route) {
+                CameraXScreen()
+            }
+            composable(Screen.Login.route) {
+                LoginScreen(
+                    viewModel = viewModel,
+                    onLoginSuccess = {
+                        navController.navigate(Screen.Home.route)
+                    },
+                    onLoginClickWithGoogle = {
+                        navController.navigate(Screen.Home.route)
+                    },
+                    onRegisterClicked = {
+                        navController.navigate(Screen.Register.route)
+                    }
+                )
+            }
+            composable(Screen.Register.route) {
+                RegisterScreen(
+                    viewModel = viewModel,
+                    onLoginClicked = {
+                        navController.navigate(Screen.Login.route)
+                    },
+                    onSuccess = {
+                        // Assuming registration is successful, navigate to the login screen
+                        navController.navigate(Screen.Login.route)
                     }
                 )
             }

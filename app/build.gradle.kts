@@ -91,7 +91,6 @@ dependencies {
     debugImplementation("androidx.compose.ui:ui-tooling")
     debugImplementation("androidx.compose.ui:ui-test-manifest")
 
-
     // Maps
     implementation("com.google.maps.android:maps-compose:4.3.0")
     implementation("com.google.maps.android:maps-compose-utils:4.3.0")
@@ -109,6 +108,9 @@ dependencies {
     implementation("org.tensorflow:tensorflow-lite:2.9.0")
     implementation("org.tensorflow:tensorflow-lite-support:0.4.4")
     implementation("org.tensorflow:tensorflow-lite-metadata:0.1.0")
+
+    //MlKit
+    implementation("com.google.mlkit:object-detection:17.0.0")
 
     // Testing
     testImplementation("junit:junit:4.13.2")
@@ -132,4 +134,10 @@ dependencies {
     ////KOIN KSP
     implementation("io.insert-koin:koin-annotations:1.2.2")
     ksp("io.insert-koin:koin-ksp-compiler:1.2.2")
+
+    ////DEPENDENCY INJECTION////
+    ////KOIN BASE////
+    implementation("io.insert-koin:koin-core:3.4.2")
+    implementation("io.insert-koin:koin-android:3.4.2")
+    implementation("io.insert-koin:koin-androidx-compose:3.4.6")
 }
