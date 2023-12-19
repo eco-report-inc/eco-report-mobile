@@ -23,7 +23,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -37,7 +36,6 @@ import com.capstone.ecoreport.R
 import com.capstone.ecoreport.data.api.ApiConfig
 import com.capstone.ecoreport.data.auth.AuthManager
 import com.capstone.ecoreport.data.auth.AuthRepository
-import com.capstone.ecoreport.data.models.LoginRequest
 import com.capstone.ecoreport.ui.theme.EcoReportTheme
 import com.capstone.ecoreport.ui.components.PasswordField
 import com.capstone.ecoreport.ui.viewmodel.AuthViewModel
@@ -47,13 +45,14 @@ import kotlinx.coroutines.launch
 @Composable
 fun LoginScreen(
     viewModel: AuthViewModel,
-    onLoginSuccess: () -> Unit, // Add a callback for successful login navigation
-    onLoginClickWithGoogle: () -> Unit, // Add a callback for Google login
+    onLoginSuccess: () -> Unit,
+    onLoginClickWithGoogle: () -> Unit,
     onRegisterClicked: () -> Unit
 ) {
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
-    val coroutineScope = rememberCoroutineScope()
+    var loading by remember { mutableStateOf(false) }
+
 
     Box(
         modifier = Modifier
@@ -84,22 +83,24 @@ fun LoginScreen(
                     .fillMaxWidth()
                     .padding(bottom = 16.dp)
             )
-            var loading by remember { mutableStateOf(false) }
+
             Button(
                 onClick = {
-                    viewModel.login(email, password)
                     loading = true
-                    coroutineScope.launch {
-                        delay(2000)
-                        loading = false
+                    viewModel.login(email, password)
+                    val isAuthenticated = viewModel.isAuthenticated.value
+                    loading = false
 
-                        if (viewModel.isAuthenticated.value) {
-                            // Call the callback for successful login
-                            onLoginSuccess()
-                        }
+                    if (isAuthenticated) {
+                        onLoginSuccess()
                     }
                 },
-                shape = RoundedCornerShape(16.dp),
+                shape = RoundedCornerShape(
+                    topStart = 16.dp,
+                    topEnd = 16.dp,
+                    bottomStart = 4.dp,
+                    bottomEnd = 4.dp
+                ),
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(56.dp)
@@ -110,69 +111,70 @@ fun LoginScreen(
                     )
                 } else {
                     if (viewModel.isAuthenticated.value) {
-                        // Handle authenticated state
                         Text("Authenticated")
                     } else {
                         Text("Login")
                     }
                 }
-
-                Spacer(modifier = Modifier.height(4.dp))
-
-                Button(
-                    onClick = { /* Handle registration logic here */ },
-                    shape = RoundedCornerShape(
-                        topStart = 4.dp,
-                        topEnd = 4.dp,
-                        bottomStart = 16.dp,
-                        bottomEnd = 16.dp
-                    ),
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .height(56.dp)
-                ) {
-                    Icon(
-                        painter = painterResource(id = R.drawable.google),
-                        contentDescription = null,
-                        modifier = Modifier
-                            .size(32.dp)
-                            .padding(end = 8.dp)
-                    )
-                    Text("Login with Google")
-                }
-
-                Spacer(modifier = Modifier.height(16.dp))
-
-                ClickableText(
-                    text = AnnotatedString("Don't have an account? Register"),
-                    onClick = { offset ->
-                        onRegisterClicked()
-                    },
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(16.dp),
-                    style = MaterialTheme.typography.bodySmall.copy(color = MaterialTheme.colorScheme.primary)
-                )
             }
+
+            Spacer(modifier = Modifier.height(4.dp))
+
+            Button(
+                onClick = { onLoginClickWithGoogle() },
+                shape = RoundedCornerShape(
+                    topStart = 4.dp,
+                    topEnd = 4.dp,
+                    bottomStart = 16.dp,
+                    bottomEnd = 16.dp
+                ),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(56.dp)
+            ) {
+                Icon(
+                    painter = painterResource(id = R.drawable.google),
+                    contentDescription = null,
+                    modifier = Modifier
+                        .size(32.dp)
+                        .padding(end = 8.dp)
+                )
+                Text("Login with Google")
+            }
+
+            Spacer(modifier = Modifier.height(16.dp))
+
+            ClickableText(
+                text = AnnotatedString("Don't have an account? Register"),
+                onClick = { offset ->
+                    onRegisterClicked()
+                },
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(16.dp),
+                style = MaterialTheme.typography.bodySmall.copy(color = MaterialTheme.colorScheme.primary)
+            )
         }
     }
 }
+
+@Preview(
+    showBackground = true,
+    wallpaper = Wallpapers.GREEN_DOMINATED_EXAMPLE
+)
 @Composable
-@Preview(showBackground = true)
 fun LoginScreenPreview() {
     val context = LocalContext.current
     val apiService = ApiConfig.getApiService()
     val authManager = AuthManager(context)
     val authRepository = AuthRepository(apiService, authManager)
     val viewModel = AuthViewModel(authRepository, authManager)
-
     EcoReportTheme {
         LoginScreen(
             viewModel = viewModel,
-            onLoginSuccess = {}, // Placeholder, as the navigation callback is not used in the preview
-            onLoginClickWithGoogle = {}, // Placeholder, as the Google login callback is not used in the preview
+            onLoginSuccess = {},
+            onLoginClickWithGoogle = {},
             onRegisterClicked = {}
         )
     }
 }
-
