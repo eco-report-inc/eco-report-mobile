@@ -54,6 +54,12 @@ android {
             excludes += "/META-INF/{AL2.0,LGPL2.1}"
         }
     }
+    androidResources {
+        noCompress += "tflite"
+    }
+    aaptOptions {
+        noCompress += "tflite"
+    }
 }
 
 dependencies {
@@ -86,13 +92,14 @@ dependencies {
     implementation("com.squareup.retrofit2:retrofit:2.9.0")
     implementation("com.squareup.retrofit2:converter-gson:2.9.0")
 
-    // Tensorflow
-    implementation("org.tensorflow:tensorflow-lite-task-vision:0.4.0")
-    implementation("org.tensorflow:tensorflow-lite-gpu-delegate-plugin:0.4.0")
-    implementation("org.tensorflow:tensorflow-lite-gpu:2.9.0")
-    implementation("org.tensorflow:tensorflow-lite:2.9.0")
-    implementation("org.tensorflow:tensorflow-lite-support:0.4.4")
+    // MLKit
+    implementation("com.google.mlkit:object-detection:17.0.0")
+    implementation("com.google.mlkit:object-detection-custom:17.0.1")
+
+    //Tensorflowlite
+    implementation("org.tensorflow:tensorflow-lite-support:0.1.0")
     implementation("org.tensorflow:tensorflow-lite-metadata:0.1.0")
+    implementation("org.tensorflow:tensorflow-lite-gpu:2.3.0")
 
     // Testing
     testImplementation("junit:junit:4.13.2")
