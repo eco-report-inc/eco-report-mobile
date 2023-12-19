@@ -4,6 +4,7 @@ plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
     id("com.google.android.libraries.mapsplatform.secrets-gradle-plugin")
+    id("com.google.devtools.ksp") version "1.9.10-1.0.13"
 }
 
 android {
@@ -69,6 +70,11 @@ dependencies {
     implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.6.2")
     implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.5.1")
     implementation("androidx.lifecycle:lifecycle-livedata-ktx:2.5.1")
+    implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.6.2")
+    implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.6.2")
+    implementation("androidx.lifecycle:lifecycle-runtime-compose:2.6.2")
+    implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.6.2")
+    implementation("androidx.lifecycle:lifecycle-viewmodel-savedstate:2.6.2")
 
     // UI
     implementation(platform("androidx.compose:compose-bom:2023.10.01"))
@@ -92,14 +98,13 @@ dependencies {
     implementation("com.squareup.retrofit2:retrofit:2.9.0")
     implementation("com.squareup.retrofit2:converter-gson:2.9.0")
 
-    // MLKit
-    implementation("com.google.mlkit:object-detection:17.0.0")
-    implementation("com.google.mlkit:object-detection-custom:17.0.1")
-
-    //Tensorflowlite
-    implementation("org.tensorflow:tensorflow-lite-support:0.1.0")
+    // Tensorflow
+    implementation("org.tensorflow:tensorflow-lite-task-vision:0.4.0")
+    implementation("org.tensorflow:tensorflow-lite-gpu-delegate-plugin:0.4.0")
+    implementation("org.tensorflow:tensorflow-lite-gpu:2.9.0")
+    implementation("org.tensorflow:tensorflow-lite:2.9.0")
+    implementation("org.tensorflow:tensorflow-lite-support:0.4.4")
     implementation("org.tensorflow:tensorflow-lite-metadata:0.1.0")
-    implementation("org.tensorflow:tensorflow-lite-gpu:2.3.0")
 
     // Testing
     testImplementation("junit:junit:4.13.2")
@@ -111,7 +116,15 @@ dependencies {
     debugImplementation("androidx.compose.ui:ui-test-manifest")
 
     //Camera
-    implementation ("androidx.camera:camera-camera2:1.1.0")
-    implementation ("androidx.camera:camera-lifecycle:1.1.0")
-    implementation ("androidx.camera:camera-view:1.1.0")
+    implementation("androidx.camera:camera-camera2:1.4.0-alpha03")
+    implementation("androidx.camera:camera-lifecycle:1.4.0-alpha03")
+    implementation("androidx.camera:camera-view:1.4.0-alpha03")
+    implementation("androidx.camera:camera-extensions:1.4.0-alpha03")
+
+    ////ACCOMPANIST
+    implementation("com.google.accompanist:accompanist-permissions:0.32.0")
+
+    ////KOIN KSP
+    implementation("io.insert-koin:koin-annotations:1.2.2")
+    ksp("io.insert-koin:koin-ksp-compiler:1.2.2")
 }
