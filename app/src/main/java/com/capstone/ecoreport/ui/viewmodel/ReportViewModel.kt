@@ -57,16 +57,5 @@ class ReportViewModel(private val reportRepository: ReportRepository) : ViewMode
             emit(null)
         }
     }
-    fun getAllReportsWithQuery(
-        longitude: String,
-        latitude: String
-    ): LiveData<List<ReportData>> = liveData(Dispatchers.IO) {
-        emit(emptyList())
-        try {
-            val response = reportRepository.getAllReportsWithQuery(longitude, latitude)
-            response?.let { emit(it) }
-        } catch (e: Exception) {
-            emit(emptyList())
-        }
-    }
+
 }

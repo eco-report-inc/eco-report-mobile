@@ -44,15 +44,13 @@ import com.capstone.ecoreport.data.models.RegisterRequest
 import com.capstone.ecoreport.ui.theme.EcoReportTheme
 import com.capstone.ecoreport.ui.components.EmailFieldWithIcon
 import com.capstone.ecoreport.ui.components.PasswordField
+import com.capstone.ecoreport.ui.viewmodel.AuthViewModel
 import kotlinx.coroutines.launch
 
 @Composable
 fun RegisterScreen(
-    context: Context,
+    viewModel: AuthViewModel,
     onLoginClicked: () -> Unit,
-    onRegisterSuccess: () -> Unit,
-    onRegisterError: (String) -> Unit,
-    authManager: AuthManager
 ) {
     var username by remember { mutableStateOf("") }
     var email by remember { mutableStateOf("") }
@@ -114,16 +112,7 @@ fun RegisterScreen(
 
             Button(
                 onClick = {
-                    coroutineScope.launch {
-                        val authRepository = AuthRepository(ApiConfig.getApiService(context), authManager)
-                        val response = authRepository.register(RegisterRequest(username, email, password, repeatPassword))
-
-                        if (response.isSuccessful) {
-                            onRegisterSuccess()
-                        } else {
-                            onRegisterError("Registration failed. Please try again.")
-                        }
-                    }
+                    viewModel.register(username, email, password, repeatPassword)
                 },
                 shape = RoundedCornerShape(
                     topStart = 16.dp,
@@ -184,18 +173,19 @@ fun RegisterScreen(
         }
     }
 }
-
-@Preview(showBackground = true)
 @Composable
+@Preview(showBackground = true)
 fun RegisterScreenPreview() {
-    val authManager = AuthManager(LocalContext.current)
+    val context = LocalContext.current
+    val apiService = ApiConfig.getApiService()
+    val authManager = AuthManager(context)
+    val authRepository = AuthRepository(apiService, authManager)
+    val viewModel = AuthViewModel(authRepository)
+    val onLoginClicked: () -> Unit = {}
     EcoReportTheme {
         RegisterScreen(
-            context = LocalContext.current,
-            onLoginClicked = {},
-            onRegisterSuccess = {},
-            onRegisterError = {},
-            authManager = authManager
+            viewModel = viewModel,
+            onLoginClicked = onLoginClicked
         )
     }
 }

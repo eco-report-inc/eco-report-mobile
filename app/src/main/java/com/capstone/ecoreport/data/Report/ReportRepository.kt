@@ -37,12 +37,4 @@ class ReportRepository(private val reportManager: ReportManager) {
             null
         }
     }
-    suspend fun getAllReportsWithQuery(longitude: String, latitude: String): List<ReportData>? {
-        val response = reportManager.getAllReportsWithQuery(longitude, latitude)
-        return if (response.isSuccessful) {
-            response.body()?.reportData
-        } else {
-            null
-        }
-    }
 }

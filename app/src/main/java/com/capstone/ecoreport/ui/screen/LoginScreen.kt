@@ -40,19 +40,14 @@ import com.capstone.ecoreport.data.auth.AuthRepository
 import com.capstone.ecoreport.data.models.LoginRequest
 import com.capstone.ecoreport.ui.theme.EcoReportTheme
 import com.capstone.ecoreport.ui.components.PasswordField
+import com.capstone.ecoreport.ui.viewmodel.AuthViewModel
 import kotlinx.coroutines.launch
 
 @Composable
-fun LoginScreen(
-    onRegisterClicked: () -> Unit,
-    onLoginSuccess: () -> Unit,
-    onLoginError: (String) -> Unit,
-    authManager: AuthManager
-) {
+fun LoginScreen(viewModel: AuthViewModel, onRegisterClicked: () -> Unit) {
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
     val coroutineScope = rememberCoroutineScope()
-    val context = LocalContext.current
 
     Box(
         modifier = Modifier
@@ -86,16 +81,7 @@ fun LoginScreen(
             var loading by remember { mutableStateOf(false) }
             Button(
                 onClick = {
-                    coroutineScope.launch {
-                        val authRepository = AuthRepository(ApiConfig.getApiService(context), authManager)
-                        val response = authRepository.login(LoginRequest(email, password))
-
-                        if (response.isSuccessful) {
-                            onLoginSuccess()
-                        } else {
-                            onLoginError("Login failed. Please try again.")
-                        }
-                    }
+                    viewModel.login(email, password)
                 },
                 shape = RoundedCornerShape(16.dp),
                 modifier = Modifier
@@ -107,64 +93,67 @@ fun LoginScreen(
                         color = MaterialTheme.colorScheme.onPrimary
                     )
                 } else {
-                    Text("Login")
+                    if (viewModel.isAuthenticated.value) {
+                        // Handle authenticated state
+                        Text("Authenticated")
+                    } else {
+                        Text("Login")
+                    }
                 }
-            }
 
-            Spacer(modifier = Modifier.height(4.dp))
+                Spacer(modifier = Modifier.height(4.dp))
 
-            Button(
-                onClick = { /* Handle registration logic here */ },
-                shape = RoundedCornerShape(
-                    topStart = 4.dp,
-                    topEnd = 4.dp,
-                    bottomStart = 16.dp,
-                    bottomEnd = 16.dp
-                ),
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(56.dp)
-            ) {
-                Icon(
-                    painter = painterResource(id = R.drawable.google),
-                    contentDescription = null,
+                Button(
+                    onClick = { /* Handle registration logic here */ },
+                    shape = RoundedCornerShape(
+                        topStart = 4.dp,
+                        topEnd = 4.dp,
+                        bottomStart = 16.dp,
+                        bottomEnd = 16.dp
+                    ),
                     modifier = Modifier
-                        .size(32.dp)
-                        .padding(end = 8.dp)
+                        .fillMaxWidth()
+                        .height(56.dp)
+                ) {
+                    Icon(
+                        painter = painterResource(id = R.drawable.google),
+                        contentDescription = null,
+                        modifier = Modifier
+                            .size(32.dp)
+                            .padding(end = 8.dp)
+                    )
+                    Text("Login with Google")
+                }
+
+                Spacer(modifier = Modifier.height(16.dp))
+
+                ClickableText(
+                    text = AnnotatedString("Don't have an account? Register"),
+                    onClick = { offset ->
+                        onRegisterClicked()
+                    },
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(16.dp),
+                    style = MaterialTheme.typography.bodySmall.copy(color = MaterialTheme.colorScheme.primary)
                 )
-                Text("Login with Google")
             }
-
-            Spacer(modifier = Modifier.height(16.dp))
-
-            ClickableText(
-                text = AnnotatedString("Don't have an account? Register"),
-                onClick = { offset ->
-                    onRegisterClicked()
-                },
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(16.dp),
-                style = MaterialTheme.typography.bodySmall.copy(color = MaterialTheme.colorScheme.primary)
-            )
         }
     }
 }
-
-@Preview(
-    showBackground = true,
-    wallpaper = Wallpapers.GREEN_DOMINATED_EXAMPLE
-)
 @Composable
+@Preview(showBackground = true)
 fun LoginScreenPreview() {
-    val authManager = AuthManager(LocalContext.current)
-
+    val context = LocalContext.current
+    val apiService = ApiConfig.getApiService()
+    val authManager = AuthManager(context)
+    val authRepository = AuthRepository(apiService, authManager)
+    val viewModel = AuthViewModel(authRepository)
+    val onRegisterClicked: () -> Unit = {}
     EcoReportTheme {
         LoginScreen(
-            onRegisterClicked = {},
-            onLoginSuccess = {},
-            onLoginError = {},
-            authManager = authManager
+            viewModel = viewModel,
+            onRegisterClicked = onRegisterClicked
         )
     }
 }

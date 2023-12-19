@@ -59,56 +59,22 @@ fun EcoReport(
     ) { innerPadding ->
         NavHost(
             navController = navController,
-            startDestination = Screen.Login.route,
+            startDestination = Screen.Home.route,
             modifier = Modifier.padding(innerPadding)
         ) {
-            composable(Screen.Login.route) {
-                LoginScreen(
-                    onRegisterClicked = {
-                        navController.navigate(Screen.Register.route)
-                    },
-                    onLoginSuccess = {
-                        navController.navigate("login/homeScreen")
-                    },
-                    onLoginError = { error ->
-                        // Handle login error
-                    },
-                    authManager = AuthManager(LocalContext.current)
-                )
-            }
-
-            composable(Screen.Register.route) {
-                RegisterScreen(
-                    context = LocalContext.current,
-                    onLoginClicked = {
-                        navController.navigate(Screen.Login.route)
-                    },
-                    onRegisterSuccess = {
-                        navController.navigate(Screen.Login.route)
-                    },
-                    onRegisterError = { error ->
-                        // Handle register error
-                    },
-                    authManager = AuthManager(LocalContext.current)
-                )
-            }
-
-            composable("login/homeScreen") {
+            composable(Screen.Home.route) {
                 HomeScreen(
                     navigateToDetail = { dummyId ->
-                        navController.navigate("home/$dummyId")
+                        navController.navigate(Screen.Detail.createRoute(dummyId))
                     }
                 )
             }
-
             composable(Screen.Maps.route) {
                 MapsScreen()
             }
-
             composable(Screen.Profile.route) {
-                ProfileScreen(navController = navController)
+                ProfileScreen(navController)
             }
-
             composable(
                 route = Screen.Detail.route,
                 arguments = listOf(
@@ -122,10 +88,6 @@ fun EcoReport(
                         navController.navigateUp()
                     }
                 )
-            }
-
-            composable(Screen.EditProfile.route) {
-                EditProfileScreen()
             }
         }
     }
