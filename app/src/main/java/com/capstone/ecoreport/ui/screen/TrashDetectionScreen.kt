@@ -1,149 +1,168 @@
 package com.capstone.ecoreport.ui.screen
 
+import android.content.Context
+import android.graphics.Bitmap
 import android.util.Log
 import android.util.Size
 import android.view.ViewGroup
+import android.widget.LinearLayout
 import androidx.activity.compose.BackHandler
 import androidx.camera.core.CameraSelector
 import androidx.camera.core.ImageCapture
+import androidx.camera.core.ImageCaptureException
+import androidx.camera.core.ImageProxy
+import androidx.camera.view.LifecycleCameraController
+import androidx.camera.view.PreviewView
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Camera
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.ImageBitmap
+import androidx.compose.ui.graphics.asImageBitmap
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.Wallpapers
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.LifecycleOwner
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.capstone.ecoreport.core.utils.rotateBitmap
+import com.capstone.ecoreport.ui.common.CameraState
 import com.capstone.ecoreport.ui.theme.EcoReportTheme
+import com.capstone.ecoreport.ui.viewmodel.TrashDetectionViewModel
+import org.koin.androidx.compose.koinViewModel
+import java.util.concurrent.Executor
 import java.util.concurrent.Executors
 
 @Composable
-fun TrashDetectionScreen() {
-    var isTrashDetected by remember { mutableStateOf(false) }
-    var cameraProvider: ProcessCameraProvider? by remember { mutableStateOf(null) }
-    var imageCapture: ImageCapture? by remember { mutableStateOf(null) }
+fun TrashDetectionScreen(
+    viewModel: TrashDetectionViewModel = koinViewModel()
+) {
+    val cameraState: CameraState by viewModel.state.collectAsStateWithLifecycle()
 
-    // Fungsi untuk menangani logika navigasi
-    fun navigateToCreateForm() {
-        // Implementasi navigasi ke halaman CreateForm disini
-    }
+    CameraContent(
+        onPhotoCaptured = viewModel::storePhotoInGallery,
+        lastCapturedPhoto = cameraState.capturedImage
+    )
+}
 
-    // Logika untuk mendeteksi sampah menggunakan TFLite
-    // ...
+@Composable
+private fun CameraContent(
+    onPhotoCaptured: (Bitmap) -> Unit,
+    lastCapturedPhoto: Bitmap? = null
+) {
 
-    // Logika untuk inisialisasi kamera
-    DisposableEffect(Unit) {
-        val cameraProviderFuture = ProcessCameraProvider.getInstance(LocalContext.current)
+    val context: Context = LocalContext.current
+    val lifecycleOwner: LifecycleOwner = LocalLifecycleOwner.current
+    val cameraController: LifecycleCameraController = remember { LifecycleCameraController(context) }
 
-        cameraProviderFuture.addListener({
-            // Setelah kamera diinisialisasi, bind use case
-            cameraProvider = cameraProviderFuture.get()
-
-            bindCameraUseCases { imageProxy ->
-                // Logika untuk mendeteksi sampah dari imageProxy
-                // ...
-
-                // Set isTrashDetected berdasarkan hasil deteksi
-                isTrashDetected = true
-
-                // Navigasi ke halaman CreateForm jika sampah terdeteksi
-                if (isTrashDetected) {
-                    navigateToCreateForm()
+    androidx.compose.material.Scaffold(
+        modifier = Modifier.fillMaxSize(),
+        floatingActionButton = {
+            androidx.compose.material.ExtendedFloatingActionButton(
+                text = { androidx.compose.material.Text(text = "Take photo") },
+                onClick = { capturePhoto(context, cameraController, onPhotoCaptured) },
+                icon = {
+                    androidx.compose.material.Icon(
+                        imageVector = Icons.Default.Camera,
+                        contentDescription = "Camera capture icon"
+                    )
                 }
-            }
-        }, ContextCompat.getMainExecutor(LocalContext.current))
-
-        onDispose {
-            // Saat komponen dihancurkan, hapus use case
-            cameraProvider?.unbindAll()
+            )
         }
-    }
+    ) { paddingValues: PaddingValues ->
 
-    BackHandler {
-        // Logika yang dijalankan ketika tombol back ditekan
-        // ...
-    }
-
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(16.dp),
-        horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.Center
-    ) {
-        // Teks header
-        Text("Arahkan sampah ke kamera", style = MaterialTheme.typography.h5)
-
-        // Kotak viewfinder (gantilah dengan implementasi kamera yang sesuai)
-        Box(
-            modifier = Modifier
-                .size(240.dp)
-                .background(Color.Black)
-                .border(2.dp, Color.White)
-                .padding(4.dp)
-        ) {
-            // PreviewView dari CameraX
-            PreviewView(LocalContext.current).apply {
-                implementationMode = PreviewView.ImplementationMode.COMPATIBLE
-                layoutParams = ViewGroup.LayoutParams(
-                    ViewGroup.LayoutParams.MATCH_PARENT,
-                    ViewGroup.LayoutParams.MATCH_PARENT
-                )
-                implementationMode = PreviewView.ImplementationMode.COMPATIBLE
-            }.also { previewView ->
-                AndroidView({ previewView }) { view ->
-                    // Hubungkan PreviewView dengan CameraX
-                    val cameraExecutor = Executors.newSingleThreadExecutor()
-
-                    val preview = Preview.Builder()
-                        .setTargetResolution(Size(640, 480))
-                        .build()
-                        .also {
-                            it.setSurfaceProvider(view.surfaceProvider)
-                        }
-
-                    imageCapture = ImageCapture.Builder().build()
-
-                    try {
-                        // Unbind semua use case sebelumnya
-                        cameraProvider?.unbindAll()
-
-                        // Bind use case baru
-                        cameraProvider?.bindToLifecycle(
-                            LocalContext.current as LifecycleOwner,
-                            CameraSelector.DEFAULT_BACK_CAMERA,
-                            preview,
-                            imageCapture
+        Box(modifier = Modifier.fillMaxSize()) {
+            AndroidView(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(paddingValues),
+                factory = { context ->
+                    PreviewView(context).apply {
+                        layoutParams = LinearLayout.LayoutParams(
+                            ViewGroup.LayoutParams.MATCH_PARENT,
+                            ViewGroup.LayoutParams.MATCH_PARENT
                         )
-                    } catch (e: Exception) {
-                        Log.e("CameraX", "Use case binding failed", e)
+                        setBackgroundColor(android.graphics.Color.BLACK)
+                        implementationMode = PreviewView.ImplementationMode.COMPATIBLE
+                        scaleType = PreviewView.ScaleType.FILL_START
+                    }.also { previewView ->
+                        previewView.controller = cameraController
+                        cameraController.bindToLifecycle(lifecycleOwner)
                     }
                 }
+            )
+
+            if (lastCapturedPhoto != null) {
+                LastPhotoPreview(
+                    modifier = Modifier.align(alignment = Alignment.BottomStart),
+                    lastCapturedPhoto = lastCapturedPhoto
+                )
             }
         }
+    }
+}
 
-        // Teks indikator
-        Text(
-            text = if (isTrashDetected) "Sampah telah terdeteksi" else "Sampah belum terdeteksi",
-            color = if (isTrashDetected) Color.Green else Color.Red,
-            style = MaterialTheme.typography.displaySmall,
-            modifier = Modifier.padding(top = 8.dp)
+private fun capturePhoto(
+    context: Context,
+    cameraController: LifecycleCameraController,
+    onPhotoCaptured: (Bitmap) -> Unit
+) {
+    val mainExecutor: Executor = ContextCompat.getMainExecutor(context)
+
+    cameraController.takePicture(mainExecutor, object : ImageCapture.OnImageCapturedCallback() {
+        override fun onCaptureSuccess(image: ImageProxy) {
+            val correctedBitmap: Bitmap = image
+                .toBitmap()
+                .rotateBitmap(image.imageInfo.rotationDegrees)
+
+            onPhotoCaptured(correctedBitmap)
+            image.close()
+        }
+
+        override fun onError(exception: ImageCaptureException) {
+            Log.e("CameraContent", "Error capturing image", exception)
+        }
+    })
+}
+
+@Composable
+private fun LastPhotoPreview(
+    modifier: Modifier = Modifier,
+    lastCapturedPhoto: Bitmap
+) {
+
+    val capturedPhoto: ImageBitmap = remember(lastCapturedPhoto.hashCode()) { lastCapturedPhoto.asImageBitmap() }
+
+    androidx.compose.material.Card(
+        modifier = modifier
+            .size(128.dp)
+            .padding(16.dp),
+        elevation = 8.dp,
+        shape = MaterialTheme.shapes.large
+    ) {
+        Image(
+            bitmap = capturedPhoto,
+            contentDescription = "Last captured photo",
+            contentScale = ContentScale.Crop
         )
     }
 }
 
-@Preview(showBackground = true,
-    wallpaper = Wallpapers.GREEN_DOMINATED_EXAMPLE)
+@Preview
 @Composable
-fun TrashDetectionScreenPreview() {
-    EcoReportTheme {
-        TrashDetectionScreen()
-    }
+private fun Preview_CameraContent() {
+    CameraContent(
+        onPhotoCaptured = {}
+    )
 }

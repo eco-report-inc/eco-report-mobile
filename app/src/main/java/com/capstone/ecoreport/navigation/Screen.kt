@@ -8,4 +8,5 @@ sealed class Screen(val route: String) {
         fun createRoute(dummyId: Int) = "home/$dummyId"
     }
     object EditProfile : Screen("editProfile")
+    object CameraX : Screen("cameraX")
 }

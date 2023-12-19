@@ -1,5 +1,9 @@
+@file:OptIn(ExperimentalPermissionsApi::class)
+
 package com.capstone.ecoreport
 
+
+import android.Manifest
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AccountCircle
@@ -31,23 +35,31 @@ import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.capstone.ecoreport.navigation.NavigationItem
 import com.capstone.ecoreport.navigation.Screen
+import com.capstone.ecoreport.ui.screen.CameraXScreen
 import com.capstone.ecoreport.ui.screen.DetailScreen
 import com.capstone.ecoreport.ui.screen.EditProfileScreen
 import com.capstone.ecoreport.ui.screen.HomeScreen
 import com.capstone.ecoreport.ui.screen.MapsScreen
+import com.capstone.ecoreport.ui.screen.NoPermissionScreen
 import com.capstone.ecoreport.ui.screen.ProfileScreen
+import com.capstone.ecoreport.ui.screen.TrashDetectionScreen
+import com.google.accompanist.permissions.ExperimentalPermissionsApi
+import com.google.accompanist.permissions.PermissionState
+import com.google.accompanist.permissions.isGranted
+import com.google.accompanist.permissions.rememberPermissionState
 
 @Composable
 fun EcoReport(
     modifier: Modifier = Modifier,
     navController: NavHostController = rememberNavController(),
+    screenWithoutBottomBarList: List<String>
 ) {
     val navBackStackEntry by navController.currentBackStackEntryAsState()
     val currentRoute = navBackStackEntry?.destination?.route
 
     Scaffold(
         bottomBar = {
-            if (currentRoute != Screen.Detail.route) {
+            if (currentRoute !in screenWithoutBottomBarList) {
                 BottomBar(navController)
             }
         },
@@ -62,6 +74,9 @@ fun EcoReport(
                 HomeScreen(
                     navigateToDetail = { dummyId ->
                         navController.navigate(Screen.Detail.createRoute(dummyId))
+                    },
+                    navigateToCamera = {
+                        navController.navigate(Screen.CameraX.route)
                     }
                 )
             }
@@ -87,6 +102,9 @@ fun EcoReport(
             }
             composable(Screen.EditProfile.route) {
                 EditProfileScreen()
+            }
+            composable(Screen.CameraX.route) {
+                CameraXScreen()
             }
         }
     }

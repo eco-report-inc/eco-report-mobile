@@ -79,44 +79,49 @@ fun EditProfileScreen() {
             // Circular profile picture
             Box(
                 modifier = Modifier
-                    .height(143.dp)
-                    .fillMaxSize()
-                    .padding(top = 8.dp),
-                contentAlignment = Alignment.Center // Mengubah contentAlignment di sini
+                    .fillMaxWidth(),
+                contentAlignment = Alignment.Center
             ) {
                 Box(
                     modifier = Modifier
-                        .size(130.dp)
-                        .clip(CircleShape)
-                        .border(2.dp, MaterialTheme.colorScheme.primary, CircleShape),
-                    contentAlignment = Alignment.Center
+                        .height(143.dp)
+                        .padding(top = 8.dp),
+                    contentAlignment = Alignment.Center // Mengubah contentAlignment di sini
                 ) {
-                    Image(
-                        painter = painterResource(id = R.drawable.ic_person),
-                        contentDescription = null,
+                    Box(
                         modifier = Modifier
-                            .size(110.dp)
+                            .size(130.dp)
                             .clip(CircleShape)
-                    )
-                }
-                // Menggunakan align pada Box yang menampung IconButton
-                Box(
-                    modifier = Modifier
-                        .size(50.dp)
-                        .clip(CircleShape)
-                        .align(Alignment.BottomEnd),
-                ) {
-                    IconButton(
-                        onClick = { },
-                        modifier = Modifier.fillMaxSize(), // Memastikan IconButton mengisi seluruh Box
-                        colors = IconButtonDefaults.iconButtonColors(MaterialTheme.colorScheme.primary)
+                            .border(2.dp, MaterialTheme.colorScheme.primary, CircleShape),
+                        contentAlignment = Alignment.Center
                     ) {
-                        Icon(
-                            imageVector = Icons.Default.CameraAlt,
+                        Image(
+                            painter = painterResource(id = R.drawable.ic_person),
                             contentDescription = null,
-                            modifier = Modifier.size(24.dp),
-                            tint = MaterialTheme.colorScheme.onPrimary
+                            modifier = Modifier
+                                .size(110.dp)
+                                .clip(CircleShape)
                         )
+                    }
+                    // Menggunakan align pada Box yang menampung IconButton
+                    Box(
+                        modifier = Modifier
+                            .size(50.dp)
+                            .clip(CircleShape)
+                            .align(Alignment.BottomEnd),
+                    ) {
+                        IconButton(
+                            onClick = { },
+                            modifier = Modifier.fillMaxSize(), // Memastikan IconButton mengisi seluruh Box
+                            colors = IconButtonDefaults.iconButtonColors(MaterialTheme.colorScheme.primary)
+                        ) {
+                            Icon(
+                                imageVector = Icons.Default.CameraAlt,
+                                contentDescription = null,
+                                modifier = Modifier.size(24.dp),
+                                tint = MaterialTheme.colorScheme.onPrimary
+                            )
+                        }
                     }
                 }
             }
