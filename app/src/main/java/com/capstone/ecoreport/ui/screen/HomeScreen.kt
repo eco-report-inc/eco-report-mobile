@@ -64,8 +64,6 @@ fun HomeScreen(
             }
             is UiState.Success -> {
                 HomeContent(
-                    query = query,
-                    onQueryChange = viewModel::search,
                     listDummy = uiState.data,
                     navigateToDetail = navigateToDetail,
                     navigateToCamera = navigateToCamera,
@@ -79,8 +77,6 @@ fun HomeScreen(
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun HomeContent(
-    query: String,
-    onQueryChange: (String) -> Unit,
     listDummy: List<Dummy>,
     navigateToDetail: (Int) -> Unit,
     navigateToCamera: () -> Unit,
@@ -89,30 +85,6 @@ fun HomeContent(
 
     Box {
         Column {
-            SearchBar(
-                query = query,
-                onQueryChange = onQueryChange,
-                onSearch = {},
-                active = false,
-                onActiveChange = {},
-                leadingIcon = {
-                    Icon(
-                        imageVector = Icons.Default.Search,
-                        contentDescription = null,
-                        tint = MaterialTheme.colorScheme.onSurfaceVariant
-                    )
-                },
-                placeholder = {
-                    Text(stringResource(R.string.search_user))
-                },
-                shape = MaterialTheme.shapes.large,
-                modifier = modifier
-                    .padding(16.dp)
-                    .fillMaxWidth()
-                    .heightIn(min = 48.dp)
-            ) {
-
-            }
             if (listDummy.isNotEmpty()) {
                 ListDummy(
                     listDummy = listDummy,
