@@ -23,7 +23,6 @@ class HeatmapManager(private val apiService: ApiService) {
                 val latLngList: List<LatLng> = reportDataList.map { reportData ->
                     LatLng(reportData.latitude.toDouble(), reportData.longitude.toDouble())
                 }
-
                 // Menghitung jumlah laporan di sekitar atau radius tertentu
                 val reportCount = reportDataList.size
 
