@@ -1,6 +1,7 @@
 package com.capstone.ecoreport.ui.screen
 
 import android.content.Context
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -65,12 +66,29 @@ fun RegisterScreen(
             .fillMaxSize()
             .padding(16.dp)
     ) {
+        Image(
+            painter = painterResource(R.drawable.final_logo), // Replace with your actual SVG file name
+            contentDescription = null,
+            modifier = Modifier
+                .align(Alignment.TopCenter) // Position at the top-left corner
+                .padding(top = 48.dp) // Adjust padding as needed
+                .size(128.dp) // Set the desired size
+        )
+
         Column(
             modifier = Modifier
                 .fillMaxSize()
                 .wrapContentSize(Alignment.Center)
                 .align(Alignment.Center)
         ) {
+            Text(
+                text = "Silahkan Register",
+                style = MaterialTheme.typography.headlineMedium, // Adjust text style as needed
+                modifier = Modifier.padding(top = 16.dp)
+            )
+
+            Spacer(modifier = Modifier.height(8.dp))
+
             OutlinedTextField(
                 value = username,
                 onValueChange = { username = it },

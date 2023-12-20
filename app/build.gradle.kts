@@ -145,4 +145,7 @@ dependencies {
     implementation("io.insert-koin:koin-core:3.4.2")
     implementation("io.insert-koin:koin-android:3.4.2")
     implementation("io.insert-koin:koin-androidx-compose:3.4.6")
+
+    // SVG support
+    implementation("com.caverock:androidsvg-aar:1.4")
 }
