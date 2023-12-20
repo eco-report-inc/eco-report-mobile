@@ -2,12 +2,10 @@ package com.capstone.ecoreport.ui.screen
 
 import android.content.Context
 import android.graphics.Bitmap
+import android.graphics.Rect
 import android.util.Log
-import android.util.Size
 import android.view.ViewGroup
 import android.widget.LinearLayout
-import androidx.activity.compose.BackHandler
-import androidx.camera.core.CameraSelector
 import androidx.camera.core.ImageCapture
 import androidx.camera.core.ImageCaptureException
 import androidx.camera.core.ImageProxy
@@ -30,7 +28,6 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.tooling.preview.Wallpapers
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.core.content.ContextCompat
@@ -38,22 +35,69 @@ import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.capstone.ecoreport.core.utils.rotateBitmap
 import com.capstone.ecoreport.ui.common.CameraState
-import com.capstone.ecoreport.ui.theme.EcoReportTheme
 import com.capstone.ecoreport.ui.viewmodel.TrashDetectionViewModel
+import com.google.mlkit.vision.objects.DetectedObject
 import org.koin.androidx.compose.koinViewModel
 import java.util.concurrent.Executor
-import java.util.concurrent.Executors
 
 @Composable
 fun TrashDetectionScreen(
     viewModel: TrashDetectionViewModel = koinViewModel()
 ) {
     val cameraState: CameraState by viewModel.state.collectAsStateWithLifecycle()
+    val detectedObjects: List<DetectedObject> by viewModel.detectedObjects.collectAsState()
 
     CameraContent(
         onPhotoCaptured = viewModel::storePhotoInGallery,
         lastCapturedPhoto = cameraState.capturedImage
     )
+    ObjectDetectionOverlay(detectedObjects = detectedObjects, modifier = Modifier.fillMaxSize())
+}
+
+@Composable
+private fun ObjectDetectionOverlay(detectedObjects: List<DetectedObject>, modifier: Modifier) {
+    Box(modifier = modifier) {
+        // Draw bounding boxes around detected objects
+        for (detectedObject in detectedObjects) {
+            val boundingBox = detectedObject.boundingBox
+            DrawBox(boundingBox)
+        }
+    }
+}
+@Composable
+private fun DrawBox(boundingBox: Rect) {
+    Box(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(color = Color.Transparent)
+            .border(width = 2.dp, color = Color.Red),
+        contentAlignment = Alignment.TopStart
+    ) {
+        // Calculate position and size based on boundingBox
+        val boxModifier = Modifier
+            .fillMaxSize()
+            .offset(
+                x = boundingBox.left.dp,
+                y = boundingBox.top.dp
+            )
+            .size(
+                width = boundingBox.width().dp,
+                height = boundingBox.height().dp
+            )
+
+        Box(
+            modifier = boxModifier,
+            contentAlignment = Alignment.Center
+        ) {
+            // You can customize the appearance of the bounding box as needed
+            // Example: Draw a semi-transparent overlay
+            Box(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .background(color = Color(255, 0, 0, 128))
+            )
+        }
+    }
 }
 
 @Composable

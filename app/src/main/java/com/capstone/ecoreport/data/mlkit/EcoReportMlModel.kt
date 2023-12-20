@@ -1,42 +1,63 @@
 package com.capstone.ecoreport.data.mlkit
 
-import android.content.ContentValues.TAG
-import android.util.Log
+import android.graphics.Bitmap
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import com.google.mlkit.common.model.LocalModel
 import com.google.mlkit.vision.common.InputImage
 import com.google.mlkit.vision.objects.DetectedObject
 import com.google.mlkit.vision.objects.ObjectDetection
-import com.google.mlkit.vision.objects.defaults.ObjectDetectorOptions
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
+import com.google.mlkit.vision.objects.custom.CustomObjectDetectorOptions
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
-class EcoReportMlModel : ViewModel() {
+class ObjectDetectionViewModel : ViewModel() {
 
-    private val objectDetector = ObjectDetection.getClient(
-        ObjectDetectorOptions.Builder()
-            .setDetectorMode(ObjectDetectorOptions.STREAM_MODE)
-            .enableClassification()
+    fun processImage(bitmap: Bitmap) {
+        val image = InputImage.fromBitmap(bitmap, 0)
+        val localModel = LocalModel.Builder()
+            .setAssetFilePath("best_float32.tflite")
             .build()
-    )
 
-    private val _detectedObjects = MutableStateFlow<List<DetectedObject>>(emptyList())
-    val detectedObjects: StateFlow<List<DetectedObject>> = _detectedObjects
+        val options = CustomObjectDetectorOptions.Builder(localModel)
+            .setDetectorMode(CustomObjectDetectorOptions.STREAM_MODE)
+            .enableClassification()
+            .setClassificationConfidenceThreshold(0.5f)
+            .setMaxPerObjectLabelCount(3)
+            .build()
 
-    fun processImage(image: InputImage) {
-        objectDetector.process(image)
-            .addOnSuccessListener { detectedObjects ->
-                _detectedObjects.value = detectedObjects
+        val customObjectDetector = ObjectDetection.getClient(options)
+
+        viewModelScope.launch(Dispatchers.IO) {
+            try {
+                customObjectDetector.process(image)
+                    .addOnSuccessListener { detectedObjects ->
+                        // Handle the detected objects on the main thread
+                        launch(Dispatchers.Main) {
+                            handleDetectedObjects(detectedObjects)
+                        }
+                    }
+                    .addOnFailureListener { e ->
+                        // Handle error
+                        e.printStackTrace()
+                    }
+            } catch (e: Exception) {
+                // Handle error
+                e.printStackTrace()
             }
-            .addOnFailureListener { e ->
-                // Handle failure
-                Log.e(TAG, "Tidak Ada Sampah ${e.message}", e)
-            }
+        }
     }
-
-    override fun onCleared() {
-        super.onCleared()
-        objectDetector.close()
+    private fun handleDetectedObjects(detectedObjects: List<DetectedObject>) {
+        // Process and handle the detected objects
+        for (detectedObject in detectedObjects) {
+            val boundingBox = detectedObject.boundingBox
+            val trackingId = detectedObject.trackingId
+            for (label in detectedObject.labels) {
+                val text = label.text
+                val index = label.index
+                val confidence = label.confidence
+                // Handle the label information as needed
+            }
+        }
     }
 }
-
-

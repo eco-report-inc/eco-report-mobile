@@ -11,7 +11,6 @@ import com.google.maps.android.heatmaps.HeatmapTileProvider
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import retrofit2.Response
-
 class HeatmapManager(private val apiService: ApiService) {
     suspend fun getAllReportsWithQuery(longitude: String, latitude: String): Response<ReportResponse> {
         return apiService.getAllReportsWithQuery(longitude, latitude)

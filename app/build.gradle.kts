@@ -115,6 +115,7 @@ dependencies {
 
     //MlKit
     implementation("com.google.mlkit:object-detection:17.0.0")
+    implementation("com.google.mlkit:object-detection-custom:17.0.0")
 
     // Testing
     testImplementation("junit:junit:4.13.2")
