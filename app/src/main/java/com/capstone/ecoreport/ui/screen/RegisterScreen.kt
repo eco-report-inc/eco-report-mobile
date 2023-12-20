@@ -114,7 +114,6 @@ fun RegisterScreen(
             Button(
                 onClick = {
                     viewModel.register(username, email, password, repeatPassword)
-                    // Assuming the registration is successful, invoke the onSuccess callback
                     onSuccess()
                 },
                 shape = RoundedCornerShape(

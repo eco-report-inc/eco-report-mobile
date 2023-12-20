@@ -10,6 +10,7 @@ import com.capstone.ecoreport.data.api.ApiConfig
 import com.capstone.ecoreport.data.auth.AuthManager
 import com.capstone.ecoreport.data.auth.AuthRepository
 import com.capstone.ecoreport.navigation.Screen
+import com.capstone.ecoreport.ui.screen.CameraXScreen
 import com.capstone.ecoreport.ui.theme.EcoReportTheme
 import com.capstone.ecoreport.ui.viewmodel.AuthViewModel
 
@@ -31,6 +32,7 @@ class MainActivity : ComponentActivity() {
         )
 
         setContent {
+            CameraXScreen()
             EcoReportTheme {
                 Surface(
                     modifier = Modifier.fillMaxSize(),

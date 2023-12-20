@@ -11,4 +11,6 @@ sealed class Screen(val route: String) {
     object CameraX : Screen("cameraX")
     object Register : Screen("register")
     object Login : Screen("login")
+    object Location : Screen("Location")
+
 }

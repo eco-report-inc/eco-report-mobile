@@ -12,7 +12,6 @@ class EcoReportApplication : Application() {
         super.onCreate()
         initKoin()
     }
-
     private fun initKoin() {
         startKoin {
             androidLogger()

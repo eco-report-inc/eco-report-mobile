@@ -90,12 +90,16 @@ dependencies {
     implementation("androidx.appcompat:appcompat:1.6.1")
     debugImplementation("androidx.compose.ui:ui-tooling")
     debugImplementation("androidx.compose.ui:ui-test-manifest")
+    implementation ("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.5.2")
+
 
     // Maps
     implementation("com.google.maps.android:maps-compose:4.3.0")
     implementation("com.google.maps.android:maps-compose-utils:4.3.0")
     implementation("com.google.maps.android:maps-compose-widgets:4.3.0")
     implementation("com.google.android.gms:play-services-maps:18.1.0")
+    implementation("com.google.android.gms:play-services-location:17.1.0")
+    implementation("com.google.accompanist:accompanist-permissions:<version>")
 
     // Networking
     implementation("com.squareup.retrofit2:retrofit:2.9.0")
