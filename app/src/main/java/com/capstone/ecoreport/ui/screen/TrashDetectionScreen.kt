@@ -27,8 +27,12 @@ import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLifecycleOwner
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.LifecycleOwner
@@ -46,24 +50,56 @@ fun TrashDetectionScreen(
 ) {
     val cameraState: CameraState by viewModel.state.collectAsStateWithLifecycle()
     val detectedObjects: List<DetectedObject> by viewModel.detectedObjects.collectAsState()
+    val isTrashDetected: Boolean by viewModel.isTrashDetected.collectAsState()
 
     CameraContent(
         onPhotoCaptured = viewModel::storePhotoInGallery,
         lastCapturedPhoto = cameraState.capturedImage
     )
-    ObjectDetectionOverlay(detectedObjects = detectedObjects, modifier = Modifier.fillMaxSize())
+    ObjectDetectionOverlay(detectedObjects = detectedObjects, modifier = Modifier.fillMaxSize(), isTrashDetected = isTrashDetected)
 }
 
 @Composable
-private fun ObjectDetectionOverlay(detectedObjects: List<DetectedObject>, modifier: Modifier) {
+private fun ObjectDetectionOverlay(detectedObjects: List<DetectedObject>, modifier: Modifier, isTrashDetected: Boolean) {
     Box(modifier = modifier) {
         // Draw bounding boxes around detected objects
         for (detectedObject in detectedObjects) {
             val boundingBox = detectedObject.boundingBox
             DrawBox(boundingBox)
+
+            // Memanggil fungsi DrawText untuk menggambar teks
+            if (isTrashDetected) {
+                DrawText("Terdeteksi Sampah", boundingBox.left.dp, boundingBox.top.dp - 16.dp)
+            }
+        }
+
+        // Menggambar teks jika tidak ada tumpukan sampah yang terdeteksi
+        if (!isTrashDetected) {
+            DrawText("Tidak Ada Tumpukan Sampah", 16.dp, 16.dp)
         }
     }
 }
+
+
+@Composable
+private fun DrawText(text: String, xPosition: Dp, yPosition: Dp) {
+    Box(
+        modifier = Modifier
+            .offset(x = xPosition, y = yPosition)
+            .background(color = Color.Transparent)
+    ) {
+        Text(
+            text = text,
+            modifier = Modifier.padding(8.dp),
+            color = Color.White,
+            style = TextStyle(
+                fontSize = 16.sp,
+                fontWeight = FontWeight.Bold
+            )
+        )
+    }
+}
+
 @Composable
 private fun DrawBox(boundingBox: Rect) {
     Box(
