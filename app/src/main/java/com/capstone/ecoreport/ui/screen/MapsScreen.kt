@@ -116,14 +116,10 @@ class BasicMapActivity : ComponentActivity() {
 @Composable
 fun MapsScreen(
     modifier: Modifier = Modifier,
-    cameraPositionState: CameraPositionState = rememberCameraPositionState(),
     onMapLoaded: () -> Unit = {},
-    content: @Composable () -> Unit = {}
 ) {
 
     var uiSettings by remember { mutableStateOf(MapUiSettings(compassEnabled = false)) }
-    var shouldAnimateZoom by remember { mutableStateOf(true) }
-    var ticker by remember { mutableIntStateOf(0) }
     var mapProperties by remember {
         mutableStateOf(MapProperties(mapType = MapType.NORMAL))
     }
@@ -132,7 +128,6 @@ fun MapsScreen(
     if (mapVisible) {
         GoogleMap(
             modifier = modifier,
-            cameraPositionState = cameraPositionState,
             properties = mapProperties,
             uiSettings = uiSettings,
             onMapLoaded = onMapLoaded,
@@ -140,14 +135,6 @@ fun MapsScreen(
                 Log.d(TAG, "POI clicked: ${it.name}")
             }
         ) {
-            // Drawing on the map is accomplished with a child-based API
-            val markerClick: (Marker) -> Boolean = {
-                Log.d(TAG, "${it.title} was clicked")
-                cameraPositionState.projection?.let { projection ->
-                    Log.d(TAG, "The current projection is: $projection")
-                }
-                false
-            }
         }
     }
 }

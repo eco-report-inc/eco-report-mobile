@@ -42,7 +42,6 @@ private fun NoPermissionContent(
         }
     }
 }
-
 @Preview
 @Composable
 private fun Preview_NoPermissionContent() {
