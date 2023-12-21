@@ -51,57 +51,65 @@ fun TrashDetectionScreen(
     val cameraState: CameraState by viewModel.state.collectAsStateWithLifecycle()
     val detectedObjects: List<DetectedObject> by viewModel.detectedObjects.collectAsState()
     val isTrashDetected: Boolean by viewModel.isTrashDetected.collectAsState()
+    val isProcessing: Boolean by viewModel.isProcessing.collectAsState()
 
     CameraContent(
         onPhotoCaptured = viewModel::storePhotoInGallery,
         lastCapturedPhoto = cameraState.capturedImage
     )
-    ObjectDetectionOverlay(detectedObjects = detectedObjects, modifier = Modifier.fillMaxSize(), isTrashDetected = isTrashDetected)
+    ObjectDetectionOverlay(detectedObjects, Modifier.fillMaxSize(), isTrashDetected, isProcessing)
 }
-
 @Composable
-private fun ObjectDetectionOverlay(detectedObjects: List<DetectedObject>, modifier: Modifier, isTrashDetected: Boolean) {
+private fun ObjectDetectionOverlay(
+    detectedObjects: List<DetectedObject>,
+    modifier: Modifier,
+    isTrashDetected: Boolean,
+    isProcessing: Boolean
+) {
     Box(modifier = modifier) {
-        // Draw bounding boxes around detected objects
         for (detectedObject in detectedObjects) {
-            val boundingBox = detectedObject.boundingBox
-            DrawBox(boundingBox)
-
-            // Memanggil fungsi DrawText untuk menggambar teks
-            if (isTrashDetected) {
-                DrawText("Terdeteksi Sampah", boundingBox.left.dp, boundingBox.top.dp - 16.dp)
-            }
+            DrawBoundingBoxAndLabel(detectedObject)
         }
-
-        // Menggambar teks jika tidak ada tumpukan sampah yang terdeteksi
-        if (!isTrashDetected) {
+        if (!isTrashDetected && !isProcessing) {
             DrawText("Tidak Ada Tumpukan Sampah", 16.dp, 16.dp)
+        } else if (isProcessing) {
+            DrawText("Memproses...", 16.dp, 16.dp)
         }
     }
 }
-
-
 @Composable
-private fun DrawText(text: String, xPosition: Dp, yPosition: Dp) {
+private fun DrawBoundingBoxAndLabel(detectedObject: DetectedObject) {
+    val boundingBox = detectedObject.boundingBox
+    val isTrashDetected = isTrash(detectedObject)
+
     Box(
         modifier = Modifier
-            .offset(x = xPosition, y = yPosition)
-            .background(color = Color.Transparent)
-    ) {
-        Text(
-            text = text,
-            modifier = Modifier.padding(8.dp),
-            color = Color.White,
-            style = TextStyle(
-                fontSize = 16.sp,
-                fontWeight = FontWeight.Bold
+            .offset(
+                x = boundingBox.left.dp,
+                y = boundingBox.top.dp
             )
-        )
+            .size(
+                width = boundingBox.width().dp,
+                height = boundingBox.height().dp
+            )
+    ) {
+        // Draw bounding box and label
+        DrawBoundingBox(boundingBox, isTrashDetected)
     }
 }
-
+private fun isTrash(detectedObject: DetectedObject): Boolean {
+    for (label in detectedObject.labels) {
+        val text = label.text
+        val confidence = label.confidence
+        // Sesuaikan dengan kriteria label sampah Anda
+        if (text.equals("trash", ignoreCase = true) && confidence > 0.5f) {
+            return true
+        }
+    }
+    return false
+}
 @Composable
-private fun DrawBox(boundingBox: Rect) {
+private fun DrawBoundingBox(boundingBox: Rect, isTrashDetected: Boolean) {
     Box(
         modifier = Modifier
             .fillMaxSize()
@@ -125,8 +133,10 @@ private fun DrawBox(boundingBox: Rect) {
             modifier = boxModifier,
             contentAlignment = Alignment.Center
         ) {
-            // You can customize the appearance of the bounding box as needed
-            // Example: Draw a semi-transparent overlay
+            // Draw bounding box
+            if (isTrashDetected) {
+                DrawText("Terdeteksi Sampah", 0.dp, -16.dp)
+            }
             Box(
                 modifier = Modifier
                     .fillMaxSize()
@@ -135,7 +145,24 @@ private fun DrawBox(boundingBox: Rect) {
         }
     }
 }
-
+@Composable
+private fun DrawText(text: String, xPosition: Dp, yPosition: Dp) {
+    Box(
+        modifier = Modifier
+            .offset(x = xPosition, y = yPosition)
+            .background(color = Color.Transparent)
+    ) {
+        Text(
+            text = text,
+            modifier = Modifier.padding(8.dp),
+            color = Color.White,
+            style = TextStyle(
+                fontSize = 16.sp,
+                fontWeight = FontWeight.Bold
+            )
+        )
+    }
+}
 @Composable
 private fun CameraContent(
     onPhotoCaptured: (Bitmap) -> Unit,
