@@ -10,13 +10,12 @@ import kotlinx.coroutines.Dispatchers
 import okhttp3.MultipartBody
 
 class ReportViewModel(private val reportRepository: ReportRepository) : ViewModel() {
-
     fun postAddReport(
         placeName: String,
         latitude: String,
         longitude: String,
-        image1: MultipartBody.Part,
-        image2: MultipartBody.Part
+        description : String,
+        image: MultipartBody.Part
     ): LiveData<ReportResult> = liveData(Dispatchers.IO) {
         emit(ReportResult.Loading)
         try {
@@ -24,10 +23,9 @@ class ReportViewModel(private val reportRepository: ReportRepository) : ViewMode
                 placeName,
                 latitude,
                 longitude,
-                image1,
-                image2
+                description,
+                image
             )
-
             if(response != null) {
                 emit(ReportResult.Success(response))
             } else {

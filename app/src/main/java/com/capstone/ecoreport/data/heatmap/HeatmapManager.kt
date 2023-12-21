@@ -26,7 +26,7 @@ class HeatmapManager(private val apiService: ApiService) {
                 val reportCount = reportDataList.size
 
                 // Menghitung radius dalam piksel berdasarkan jarak dalam kilometer
-                val radiusInKm = 3
+                val radiusInKm = 10
                 val earthRadius = 6371 // Radius bumi dalam kilometer
                 val visibleRegion = googleMap.projection.visibleRegion
                 val radiusInPixels = (radiusInKm * (visibleRegion.farRight.longitude - visibleRegion.farLeft.longitude) /

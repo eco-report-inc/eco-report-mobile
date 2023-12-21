@@ -28,7 +28,4 @@ class AuthRepository(private val apiService: ApiService, private val authManager
         }
         return response
     }
-    fun logout() {
-        authManager.clearAuthToken()
-    }
 }

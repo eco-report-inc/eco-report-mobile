@@ -12,11 +12,12 @@ class EcoReportApplication : Application() {
         super.onCreate()
         initKoin()
     }
+
     private fun initKoin() {
         startKoin {
             androidLogger()
             androidContext(this@EcoReportApplication)
-            modules(defaultModule)
+            modules(defaultModule, viewModelModule)
         }
     }
 }

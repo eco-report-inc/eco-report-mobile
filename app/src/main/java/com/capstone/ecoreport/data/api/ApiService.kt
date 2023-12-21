@@ -39,13 +39,12 @@ interface ApiService {
         @Part("nama_tempat") placeName: String,
         @Part("lang") latitude: String,
         @Part("long") longitude: String,
-        @Part image1: MultipartBody.Part,
-        @Part image2: MultipartBody.Part
+        @Part("deskripsi") description: String,
+        @Part image: MultipartBody.Part
     ): Response<ReportResponse>
     // Get All Reports
     @GET("report/report")
     suspend fun getAllReports(): Response<ReportResponse>
-
     @GET("report/report/{report_id}")
     suspend fun getSingleReport(@Path("report_id") reportId: String): Response<ReportResponse>
 

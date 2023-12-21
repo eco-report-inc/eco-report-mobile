@@ -10,10 +10,10 @@ class ReportManager(private val apiService: ApiService) {
         placeName: String,
         latitude: String,
         longitude: String,
-        image1: MultipartBody.Part,
-        image2: MultipartBody.Part
+        description : String,
+        image: MultipartBody.Part
     ): Response<ReportResponse> {
-        return apiService.postAddReport(placeName, latitude, longitude, image1, image2)
+        return apiService.postAddReport(placeName, latitude, longitude, description, image)
     }
     suspend fun getAllReports(): Response<ReportResponse> {
         return apiService.getAllReports()

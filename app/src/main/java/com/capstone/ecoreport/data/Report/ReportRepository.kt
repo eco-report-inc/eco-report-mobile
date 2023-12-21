@@ -10,10 +10,10 @@ class ReportRepository(private val reportManager: ReportManager) {
         placeName: String,
         latitude: String,
         longitude: String,
-        image1: MultipartBody.Part,
-        image2: MultipartBody.Part
+        description : String,
+        image: MultipartBody.Part
     ): ReportResponse? {
-        val response = reportManager.postAddReport(placeName, latitude, longitude, image1, image2)
+        val response = reportManager.postAddReport(placeName, latitude, longitude, description, image)
         return if (response.isSuccessful) {
             response.body()
         } else {
