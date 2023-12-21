@@ -2,10 +2,11 @@ package com.capstone.ecoreport.ui.screen
 
 import android.content.Context
 import android.graphics.Bitmap
-import android.graphics.Rect
 import android.util.Log
 import android.view.ViewGroup
 import android.widget.LinearLayout
+import androidx.activity.compose.BackHandler
+import androidx.camera.core.CameraSelector
 import androidx.camera.core.ImageCapture
 import androidx.camera.core.ImageCaptureException
 import androidx.camera.core.ImageProxy
@@ -27,141 +28,40 @@ import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLifecycleOwner
-import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.Dp
+import androidx.compose.ui.tooling.preview.Wallpapers
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.capstone.ecoreport.core.utils.rotateBitmap
 import com.capstone.ecoreport.ui.common.CameraState
+import com.capstone.ecoreport.ui.theme.EcoReportTheme
 import com.capstone.ecoreport.ui.viewmodel.TrashDetectionViewModel
 import com.google.mlkit.vision.objects.DetectedObject
 import org.koin.androidx.compose.koinViewModel
 import java.util.concurrent.Executor
+import androidx.compose.foundation.Canvas
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.geometry.Size
+import androidx.compose.ui.graphics.drawscope.Stroke
+import androidx.compose.ui.graphics.drawscope.drawIntoCanvas
+import androidx.compose.ui.graphics.nativeCanvas
+import androidx.compose.ui.text.drawText
 
 @Composable
 fun TrashDetectionScreen(
     viewModel: TrashDetectionViewModel = koinViewModel()
 ) {
     val cameraState: CameraState by viewModel.state.collectAsStateWithLifecycle()
-    val detectedObjects: List<DetectedObject> by viewModel.detectedObjects.collectAsState()
-    val isTrashDetected: Boolean by viewModel.isTrashDetected.collectAsState()
-    val isProcessing: Boolean by viewModel.isProcessing.collectAsState()
 
     CameraContent(
         onPhotoCaptured = viewModel::storePhotoInGallery,
         lastCapturedPhoto = cameraState.capturedImage
     )
-    ObjectDetectionOverlay(detectedObjects, Modifier.fillMaxSize(), isTrashDetected, isProcessing)
-}
-@Composable
-private fun ObjectDetectionOverlay(
-    detectedObjects: List<DetectedObject>,
-    modifier: Modifier,
-    isTrashDetected: Boolean,
-    isProcessing: Boolean
-) {
-    Box(modifier = modifier) {
-        for (detectedObject in detectedObjects) {
-            DrawBoundingBoxAndLabel(detectedObject)
-        }
-        if (!isTrashDetected && !isProcessing) {
-            DrawText("Tidak Ada Tumpukan Sampah", 16.dp, 16.dp)
-        } else if (isProcessing) {
-            DrawText("Memproses...", 16.dp, 16.dp)
-        }
-    }
-}
-@Composable
-private fun DrawBoundingBoxAndLabel(detectedObject: DetectedObject) {
-    val boundingBox = detectedObject.boundingBox
-    val isTrashDetected = isTrash(detectedObject)
-
-    Box(
-        modifier = Modifier
-            .offset(
-                x = boundingBox.left.dp,
-                y = boundingBox.top.dp
-            )
-            .size(
-                width = boundingBox.width().dp,
-                height = boundingBox.height().dp
-            )
-    ) {
-        // Draw bounding box and label
-        DrawBoundingBox(boundingBox, isTrashDetected)
-    }
-}
-private fun isTrash(detectedObject: DetectedObject): Boolean {
-    for (label in detectedObject.labels) {
-        val text = label.text
-        val confidence = label.confidence
-        // Sesuaikan dengan kriteria label sampah Anda
-        if (text.equals("trash", ignoreCase = true) && confidence > 0.5f) {
-            return true
-        }
-    }
-    return false
-}
-@Composable
-private fun DrawBoundingBox(boundingBox: Rect, isTrashDetected: Boolean) {
-    Box(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(color = Color.Transparent)
-            .border(width = 2.dp, color = Color.Red),
-        contentAlignment = Alignment.TopStart
-    ) {
-        // Calculate position and size based on boundingBox
-        val boxModifier = Modifier
-            .fillMaxSize()
-            .offset(
-                x = boundingBox.left.dp,
-                y = boundingBox.top.dp
-            )
-            .size(
-                width = boundingBox.width().dp,
-                height = boundingBox.height().dp
-            )
-
-        Box(
-            modifier = boxModifier,
-            contentAlignment = Alignment.Center
-        ) {
-            // Draw bounding box
-            if (isTrashDetected) {
-                DrawText("Terdeteksi Sampah", 0.dp, -16.dp)
-            }
-            Box(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .background(color = Color(255, 0, 0, 128))
-            )
-        }
-    }
-}
-@Composable
-private fun DrawText(text: String, xPosition: Dp, yPosition: Dp) {
-    Box(
-        modifier = Modifier
-            .offset(x = xPosition, y = yPosition)
-            .background(color = Color.Transparent)
-    ) {
-        Text(
-            text = text,
-            modifier = Modifier.padding(8.dp),
-            color = Color.White,
-            style = TextStyle(
-                fontSize = 16.sp,
-                fontWeight = FontWeight.Bold
-            )
-        )
-    }
 }
 @Composable
 private fun CameraContent(
@@ -219,7 +119,6 @@ private fun CameraContent(
         }
     }
 }
-
 private fun capturePhoto(
     context: Context,
     cameraController: LifecycleCameraController,
@@ -265,7 +164,6 @@ private fun LastPhotoPreview(
         )
     }
 }
-
 @Preview
 @Composable
 private fun Preview_CameraContent() {

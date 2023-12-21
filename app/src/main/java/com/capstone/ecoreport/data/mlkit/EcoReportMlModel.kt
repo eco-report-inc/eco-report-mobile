@@ -1,6 +1,5 @@
 package com.capstone.ecoreport.data.mlkit
 
-import android.content.Context
 import android.graphics.Bitmap
 import androidx.lifecycle.ViewModel
 import com.google.mlkit.common.model.LocalModel
@@ -23,6 +22,7 @@ class ObjectDetectionViewModel : ViewModel() {
             .build()
 
     private val objectDetector = ObjectDetection.getClient(customObjectDetectorOptions)
+
     fun processImage(bitmap: Bitmap, rotationDegrees: Int): List<DetectedObject> {
         val image = InputImage.fromBitmap(bitmap, rotationDegrees)
         return objectDetector.process(image).addOnSuccessListener { results ->
