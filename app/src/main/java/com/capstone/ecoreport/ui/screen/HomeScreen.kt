@@ -14,6 +14,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Camera
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -103,7 +104,7 @@ fun HomeContent(
                 .padding(24.dp)
         ) {
             Icon(
-                imageVector = Icons.Filled.Camera,
+                imageVector = Icons.Filled.Add,
                 contentDescription = "Open Camera",
                 tint = MaterialTheme.colorScheme.primary
             )
