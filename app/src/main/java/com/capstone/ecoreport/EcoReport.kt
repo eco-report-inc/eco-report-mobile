@@ -112,7 +112,11 @@ fun EcoReport(
                 )
             }
             composable(Screen.EditProfile.route) {
-                EditProfileScreen()
+                EditProfileScreen(
+                    navigateBack = {
+                        navController.navigateUp()
+                    }
+                )
             }
             composable(Screen.CameraX.route) {
                 CameraXScreen()

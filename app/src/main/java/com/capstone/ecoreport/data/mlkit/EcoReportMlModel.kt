@@ -7,7 +7,9 @@ import com.google.mlkit.vision.common.InputImage
 import com.google.mlkit.vision.objects.DetectedObject
 import com.google.mlkit.vision.objects.ObjectDetection
 import com.google.mlkit.vision.objects.custom.CustomObjectDetectorOptions
+import org.koin.android.annotation.KoinViewModel
 
+@KoinViewModel
 class ObjectDetectionViewModel : ViewModel() {
     private val localModel = LocalModel.Builder()
         .setAssetFilePath("best_float32.tflite")

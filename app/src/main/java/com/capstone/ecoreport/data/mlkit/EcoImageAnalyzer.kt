@@ -3,10 +3,12 @@ package com.capstone.ecoreport.data.mlkit
 import androidx.camera.core.ExperimentalGetImage
 import androidx.camera.core.ImageAnalysis
 import androidx.camera.core.ImageProxy
+import com.capstone.ecoreport.utils.BoundingBox
+import com.capstone.ecoreport.utils.UIUpdater
 import com.google.mlkit.vision.common.InputImage
 import com.google.mlkit.vision.objects.DetectedObject
 
-class EcoImageAnalyzer(private val viewModel: ObjectDetectionViewModel) : ImageAnalysis.Analyzer {
+class EcoImageAnalyzer(private val viewModel: ObjectDetectionViewModel, private val uiUpdater: UIUpdater) : ImageAnalysis.Analyzer {
 
     @ExperimentalGetImage override fun analyze(imageProxy: ImageProxy) {
         val mediaImage = imageProxy.image
@@ -34,7 +36,24 @@ class EcoImageAnalyzer(private val viewModel: ObjectDetectionViewModel) : ImageA
                 val index = label.index
                 val confidence = label.confidence
 
-                // Lakukan sesuatu dengan informasi label (misalnya, tampilkan di UI)
+                // Tampilkan bounding box di UI
+                val uiBoundingBox = BoundingBox(
+                    boundingBox.left.toFloat(),
+                    boundingBox.top.toFloat(),
+                    boundingBox.right.toFloat(),
+                    boundingBox.bottom.toFloat()
+                )
+
+                // Tampilkan label di UI
+                val uiLabel = DetectedObject.Label(
+                    text,
+                    index.toFloat(),
+                    confidence.toInt()
+                )
+
+                // Tambahkan bounding box dan label ke UI
+                uiUpdater.addBoundingBox(uiBoundingBox)
+                uiUpdater.addLabel(uiLabel)
             }
         }
     }

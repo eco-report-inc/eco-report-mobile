@@ -5,16 +5,14 @@ import android.graphics.Bitmap
 import android.util.Log
 import android.view.ViewGroup
 import android.widget.LinearLayout
-import androidx.activity.compose.BackHandler
-import androidx.camera.core.CameraSelector
+import androidx.camera.core.ImageAnalysis
 import androidx.camera.core.ImageCapture
 import androidx.camera.core.ImageCaptureException
 import androidx.camera.core.ImageProxy
 import androidx.camera.view.LifecycleCameraController
 import androidx.camera.view.PreviewView
+import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Camera
@@ -22,14 +20,11 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLifecycleOwner
-import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.tooling.preview.Wallpapers
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.core.content.ContextCompat
@@ -37,41 +32,80 @@ import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.capstone.ecoreport.core.utils.rotateBitmap
 import com.capstone.ecoreport.ui.common.CameraState
-import com.capstone.ecoreport.ui.theme.EcoReportTheme
 import com.capstone.ecoreport.ui.viewmodel.TrashDetectionViewModel
-import com.google.mlkit.vision.objects.DetectedObject
 import org.koin.androidx.compose.koinViewModel
 import java.util.concurrent.Executor
-import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Size
-import androidx.compose.ui.graphics.drawscope.Stroke
-import androidx.compose.ui.graphics.drawscope.drawIntoCanvas
-import androidx.compose.ui.graphics.nativeCanvas
-import androidx.compose.ui.text.drawText
+import androidx.compose.ui.graphics.Color
+import com.capstone.ecoreport.data.mlkit.EcoImageAnalyzer
+import com.capstone.ecoreport.data.mlkit.ObjectDetectionViewModel
+import com.capstone.ecoreport.utils.BoundingBox
+import com.capstone.ecoreport.utils.UIUpdater
+import com.google.mlkit.vision.objects.DetectedObject
 
 @Composable
 fun TrashDetectionScreen(
-    viewModel: TrashDetectionViewModel = koinViewModel()
+    trashDetectionViewModel: TrashDetectionViewModel = koinViewModel(),
+    objectViewModel: ObjectDetectionViewModel = koinViewModel()
 ) {
-    val cameraState: CameraState by viewModel.state.collectAsStateWithLifecycle()
+    val cameraState: CameraState by trashDetectionViewModel.state.collectAsStateWithLifecycle()
+
+    var boundingBoxesState = remember { mutableStateListOf<BoundingBox>() }
+    var labelsState = remember { mutableStateListOf<DetectedObject.Label>() }
 
     CameraContent(
-        onPhotoCaptured = viewModel::storePhotoInGallery,
-        lastCapturedPhoto = cameraState.capturedImage
+        onPhotoCaptured = trashDetectionViewModel::storePhotoInGallery,
+        lastCapturedPhoto = cameraState.capturedImage,
+        viewModel = objectViewModel,
+        uiUpdater = remember {
+            object : UIUpdater {
+                override fun addBoundingBox(boundingBox: BoundingBox) {
+                    boundingBoxesState.add(boundingBox)
+                }
+
+                override fun addLabel(label: DetectedObject.Label) {
+                    labelsState.add(label)
+                }
+
+            }
+        }
     )
 }
 @Composable
 private fun CameraContent(
     onPhotoCaptured: (Bitmap) -> Unit,
-    lastCapturedPhoto: Bitmap? = null
+    lastCapturedPhoto: Bitmap? = null,
+    viewModel: ObjectDetectionViewModel,
+    uiUpdater: UIUpdater
 ) {
 
     val context: Context = LocalContext.current
     val lifecycleOwner: LifecycleOwner = LocalLifecycleOwner.current
     val cameraController: LifecycleCameraController = remember { LifecycleCameraController(context) }
+    val cameraExecutor = ContextCompat.getMainExecutor(context)
+
+    var boundingBoxesState = remember { mutableStateListOf<BoundingBox>() }
+    var labelsState = remember { mutableStateListOf<DetectedObject.Label>() }
+
+
+    val uiUpdater = remember { object : UIUpdater{
+        override fun addBoundingBox(boundingBox: BoundingBox) {
+            boundingBoxesState.add(boundingBox)
+        }
+
+        override fun addLabel(label: DetectedObject.Label) {
+            labelsState.add(label)
+        }
+
+    } }
+    val imageAnalysis = ImageAnalysis.Builder()
+        .setBackpressureStrategy(ImageAnalysis.STRATEGY_KEEP_ONLY_LATEST)
+        .build()
+    imageAnalysis.setAnalyzer(cameraExecutor, EcoImageAnalyzer(viewModel, uiUpdater))
+
 
     androidx.compose.material.Scaffold(
         modifier = Modifier.fillMaxSize(),
@@ -109,6 +143,15 @@ private fun CameraContent(
                     }
                 }
             )
+            Canvas(modifier = Modifier.fillMaxSize()) {
+                for (boundingBox in boundingBoxesState) {
+                    drawRect(
+                        color = Color.Red,
+                        topLeft = Offset(boundingBox.left, boundingBox.top),
+                        size = Size(boundingBox.right - boundingBox.left, boundingBox.bottom - boundingBox.top)
+                    )
+                }
+            }
             if (lastCapturedPhoto != null) {
                 LastPhotoPreview(
                     modifier = Modifier.align(alignment = Alignment.BottomStart),
@@ -162,11 +205,4 @@ private fun LastPhotoPreview(
             contentScale = ContentScale.Crop
         )
     }
-}
-@Preview
-@Composable
-private fun Preview_CameraContent() {
-    CameraContent(
-        onPhotoCaptured = {}
-    )
 }
