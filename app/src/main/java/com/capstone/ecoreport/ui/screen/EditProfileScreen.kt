@@ -41,7 +41,9 @@ import com.capstone.ecoreport.ui.components.PasswordField
 import com.capstone.ecoreport.ui.components.RepeatPasswordField
 
 @Composable
-fun EditProfileScreen() {
+fun EditProfileScreen(
+    navigateBack: () -> Unit,
+) {
 
     var name by remember { mutableStateOf("") }
     var email by remember { mutableStateOf("") }
@@ -60,7 +62,7 @@ fun EditProfileScreen() {
                 imageVector = Icons.Default.ArrowBack,
                 contentDescription = null,
                 modifier = Modifier
-                    .clickable { /* Handle navigation back here */ }
+                    .clickable { navigateBack() }
                     .padding(top = 8.dp, bottom = 16.dp)
             )
         }
@@ -184,16 +186,5 @@ fun EditProfileScreen() {
                     .padding(vertical = 8.dp)
             )
         }
-    }
-}
-
-@Preview(
-    showBackground = true,
-    wallpaper = Wallpapers.GREEN_DOMINATED_EXAMPLE
-)
-@Composable
-fun EditProfileScreenPreview() {
-    EcoReportTheme {
-        EditProfileScreen()
     }
 }
