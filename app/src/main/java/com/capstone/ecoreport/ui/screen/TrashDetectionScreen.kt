@@ -109,7 +109,6 @@ private fun CameraContent(
                     }
                 }
             )
-
             if (lastCapturedPhoto != null) {
                 LastPhotoPreview(
                     modifier = Modifier.align(alignment = Alignment.BottomStart),
