@@ -66,14 +66,6 @@ fun RegisterScreen(
             .fillMaxSize()
             .padding(16.dp)
     ) {
-        Image(
-            painter = painterResource(R.drawable.final_logo), // Replace with your actual SVG file name
-            contentDescription = null,
-            modifier = Modifier
-                .align(Alignment.TopCenter) // Position at the top-left corner
-                .padding(top = 48.dp) // Adjust padding as needed
-                .size(128.dp) // Set the desired size
-        )
 
         Column(
             modifier = Modifier
@@ -81,6 +73,15 @@ fun RegisterScreen(
                 .wrapContentSize(Alignment.Center)
                 .align(Alignment.Center)
         ) {
+            Image(
+                painter = painterResource(R.drawable.final_logo), // Replace with your actual SVG file name
+                contentDescription = null,
+                modifier = Modifier
+                    .align(Alignment.CenterHorizontally) // Position at the top-left corner
+                    .padding(bottom = 48.dp) // Adjust padding as needed
+                    .size(128.dp) // Set the desired size
+            )
+
             Text(
                 text = "Silahkan Register",
                 style = MaterialTheme.typography.headlineMedium, // Adjust text style as needed
@@ -143,7 +144,6 @@ fun RegisterScreen(
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(56.dp)
-                    .background(MaterialTheme.colorScheme.primary)
             ) {
                 if (loading) {
                     CircularProgressIndicator(
