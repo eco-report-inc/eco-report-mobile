@@ -12,6 +12,9 @@ class ViewModelFactory(
     @Suppress("UNCHECKED_CAST")
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
         return when {
+            modelClass.isAssignableFrom(HomeViewModel::class.java) -> {
+                HomeViewModel(reportRepository) as T
+            }
             modelClass.isAssignableFrom(ReportViewModel::class.java) -> {
                 ReportViewModel(reportRepository) as T
             }
