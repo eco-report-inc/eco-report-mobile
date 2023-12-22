@@ -71,7 +71,6 @@ fun CreateFormScreen() {
                 modifier = Modifier.weight(1f)
             )
         }
-
         // Button to Submit Form
         Button(
             onClick = {
@@ -91,7 +90,6 @@ fun CreateFormScreen() {
         }
     }
 }
-
 @Composable
 fun LabeledTextField(
     label: String,
