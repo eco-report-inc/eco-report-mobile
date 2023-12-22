@@ -76,8 +76,9 @@ fun EcoReport(
         ) {
             composable(Screen.Home.route) {
                 HomeScreen(
-                    navigateToDetail = { dummyId ->
-                        navController.navigate(Screen.Detail.createRoute(dummyId))
+                    navigateToDetail = { reportId ->
+                        // Ensure that reportId is an Int
+                        navController.navigate(Screen.Detail.createRoute(reportId.toInt()))
                     },
                     navigateToCamera = {
                         navController.navigate(Screen.CameraX.route)
@@ -98,14 +99,14 @@ fun EcoReport(
                 )
             }
             composable(
-                route = Screen.Detail.route,
+                route = Screen.Detail.route + "/{reportId}",
                 arguments = listOf(
-                    navArgument("dummyId") { type = NavType.IntType }
+                    navArgument("reportId") { type = NavType.IntType }
                 )
             ) {
-                val id = it.arguments?.getInt("dummyId") ?: -1
+                val id = it.arguments?.getInt("reportId") ?: -1
                 DetailScreen(
-                    dummyId = id,
+                    reportId = id.toString(),
                     navigateBack = {
                         navController.navigateUp()
                     }

@@ -1,4 +1,4 @@
-/*package com.capstone.ecoreport.ui.viewmodel
+package com.capstone.ecoreport.ui.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
@@ -15,9 +15,6 @@ class ModelFactory(
     @Suppress("UNCHECKED_CAST")
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
         return when {
-            modelClass.isAssignableFrom(AuthViewModel::class.java) -> {
-                AuthViewModel(authRepository) as T
-            }
             modelClass.isAssignableFrom(ReportViewModel::class.java) -> {
                 ReportViewModel(reportRepository) as T
             }
@@ -28,4 +25,3 @@ class ModelFactory(
         }
     }
 }
- */

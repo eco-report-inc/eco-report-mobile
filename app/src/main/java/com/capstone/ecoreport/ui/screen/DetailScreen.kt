@@ -24,12 +24,12 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import coil.compose.rememberImagePainter
+import com.capstone.ecoreport.R
 import com.capstone.ecoreport.dl.Injection
 import com.capstone.ecoreport.ui.common.UiState
 import com.capstone.ecoreport.ui.components.GoogleMapsView
@@ -38,45 +38,43 @@ import com.capstone.ecoreport.ui.viewmodel.ViewModelFactory
 
 @Composable
 fun DetailScreen(
-    dummyId: Int,
+    reportId: String,
     navigateBack: () -> Unit,
     viewModel: DetailViewModel = viewModel(
-        factory = ViewModelFactory(Injection.provideRepository())
+        factory = ViewModelFactory(Injection.provideRepository(), Injection.provideProfilePhotoRepository())
     )
 ) {
-    viewModel.uiState.collectAsState(initial = UiState.Loading).value.let { uiState ->
-        when (uiState) {
-            is UiState.Loading -> {
-                viewModel.getDummyById(dummyId)
-            }
-
-            is UiState.Success -> {
-                val data = uiState.data
-                DetailInfo(
-                    id = data.id,
-                    username = data.username,
-                    userImage = data.userImage,
-                    photo = data.photo,
-                    name = data.name,
-                    description = data.description,
-                    releaseDate = data.release,
-                    lat = data.lat,
-                    lon = data.lon,
-                    navigateBack = navigateBack,
-                )
-            }
-
-            is UiState.Error -> {}
+    viewModel.getReportById(reportId)
+    val uiState = viewModel.uiState.collectAsState().value
+    when (uiState) {
+        is UiState.Success -> {
+            val data = uiState.data
+            DetailInfo(
+                reportId = data.reportId.toString(),
+                username = data.userId,
+                userImageUrl = data.images.firstOrNull()?.imageUrl ?: "",
+                photoUrl = data.images.getOrNull(1)?.imageUrl ?: "",
+                name = data.placeName,
+                description = data.createdAt,
+                releaseDate = data.updatedAt,
+                lat = data.latitude.toDouble(),
+                lon = data.longitude.toDouble(),
+                navigateBack = navigateBack,
+            )
+        }
+        is UiState.Error -> {
+        }
+        is UiState.Loading -> {
         }
     }
 }
 
 @Composable
 fun DetailInfo(
-    id: Int,
+    reportId: String,
     username: String,
-    @DrawableRes userImage: Int,
-    @DrawableRes photo: Int,
+    userImageUrl: String,
+    photoUrl: String,
     name: String,
     description: String,
     releaseDate: String,
@@ -114,12 +112,13 @@ fun DetailInfo(
 
         // Photo
         Image(
-            painter = painterResource(id = photo),
+            painter = rememberImagePainter(userImageUrl),
             contentDescription = null,
             modifier = Modifier
                 .fillMaxWidth()
                 .height(200.dp)
-                .clip(shape = RoundedCornerShape(8.dp))
+                .clip(shape = RoundedCornerShape(8.dp)),
+            contentScale = ContentScale.Crop
         )
 
         // Description Text
@@ -139,12 +138,13 @@ fun DetailInfo(
         ) {
             // User Image
             Image(
-                painter = painterResource(id = userImage),
+                painter = rememberImagePainter(photoUrl),
                 contentDescription = null,
                 modifier = Modifier
                     .size(40.dp)
                     .clip(CircleShape)
-                    .background(MaterialTheme.colorScheme.primary)
+                    .background(MaterialTheme.colorScheme.primary),
+                contentScale = ContentScale.Crop
             )
 
             // User Name
@@ -153,5 +153,15 @@ fun DetailInfo(
                 modifier = Modifier.padding(start = 8.dp)
             )
         }
+        // Report ID Text
+        Text(
+            text = "Report ID: $reportId",
+            modifier = Modifier.padding(vertical = 8.dp)
+        )
+        // Release Date Text
+        Text(
+            text = "Release Date: $releaseDate",
+            modifier = Modifier.padding(vertical = 8.dp)
+        )
     }
 }

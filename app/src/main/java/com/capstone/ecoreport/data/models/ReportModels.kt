@@ -12,7 +12,7 @@ data class ImageResponse(
 )
 data class ReportData(
     @SerializedName("report_id")
-    val reportId: String,
+    val reportId: Int,
     @SerializedName("user_id")
     val userId: String,
     @SerializedName("nama_tempat")
