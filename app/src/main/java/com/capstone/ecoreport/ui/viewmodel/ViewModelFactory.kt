@@ -20,10 +20,9 @@ class ViewModelFactory(
                 ProfileViewModel(profilePhotoRepository) as T
             }
             modelClass.isAssignableFrom(DetailViewModel::class.java) -> {
-                DetailViewModel(reportRepository) as T
+                DetailViewModel(reportRepository, profilePhotoRepository) as T
             }
             else -> throw IllegalArgumentException("Unknown ViewModel class: ${modelClass.name}")
         }
     }
 }
-

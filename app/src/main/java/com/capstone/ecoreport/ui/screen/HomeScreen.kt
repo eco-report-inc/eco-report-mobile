@@ -54,7 +54,6 @@ import java.time.temporal.TemporalQuery
 fun HomeScreen(
     modifier: Modifier = Modifier,
     viewModel: HomeViewModel = viewModel(
-        factory = ViewModelFactory(Injection.provideRepository())
     ),
     navigateToDetail: (String) -> Unit,
     navigateToCamera: () -> Unit
@@ -133,7 +132,7 @@ fun ListReport(
                 report = report,
                 modifier = Modifier
                     .animateItemPlacement(tween(durationMillis = 200))
-                    .clickable { navigateToDetail(report.reportId) }
+                    .clickable { navigateToDetail(report.reportId.toString())  }
             )
         }
     }

@@ -41,7 +41,6 @@ fun DetailScreen(
     reportId: String,
     navigateBack: () -> Unit,
     viewModel: DetailViewModel = viewModel(
-        factory = ViewModelFactory(Injection.provideRepository())
     )
 ) {
     viewModel.getReportById(reportId)
@@ -52,7 +51,7 @@ fun DetailScreen(
         is UiState.Success -> {
             val data = uiState.data
             DetailInfo(
-                reportId = data.reportId,
+                reportId = data.reportId.toString(),
                 username = data.userId,
                 userImageUrl = data.images.firstOrNull()?.imageUrl ?: "",
                 photoUrl = data.images.getOrNull(1)?.imageUrl ?: "",
@@ -66,11 +65,9 @@ fun DetailScreen(
         }
 
         is UiState.Error -> {
-            // Handle error state
         }
 
         is UiState.Loading -> {
-            // Handle loading state
         }
     }
 }
