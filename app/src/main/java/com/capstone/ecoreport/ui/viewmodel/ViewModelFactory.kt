@@ -4,7 +4,6 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.capstone.ecoreport.data.Report.ReportRepository
 import com.capstone.ecoreport.data.user.ProfilePhotoRepository
-
 class ViewModelFactory(
     private val reportRepository: ReportRepository,
     private val profilePhotoRepository: ProfilePhotoRepository

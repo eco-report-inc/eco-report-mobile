@@ -54,6 +54,7 @@ import java.time.temporal.TemporalQuery
 fun HomeScreen(
     modifier: Modifier = Modifier,
     viewModel: HomeViewModel = viewModel(
+        factory = ViewModelFactory(Injection.provideRepository(), Injection.provideProfilePhotoRepository())
     ),
     navigateToDetail: (String) -> Unit,
     navigateToCamera: () -> Unit
@@ -74,7 +75,6 @@ fun HomeScreen(
         }
     }
 }
-
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun HomeContent(

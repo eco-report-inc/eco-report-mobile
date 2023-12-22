@@ -41,11 +41,11 @@ fun DetailScreen(
     reportId: String,
     navigateBack: () -> Unit,
     viewModel: DetailViewModel = viewModel(
+        factory = ViewModelFactory(Injection.provideRepository(), Injection.provideProfilePhotoRepository())
     )
 ) {
     viewModel.getReportById(reportId)
     val uiState = viewModel.uiState.collectAsState().value
-
     when (uiState) {
         is UiState.Success -> {
             val data = uiState.data
