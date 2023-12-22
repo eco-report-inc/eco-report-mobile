@@ -44,7 +44,6 @@ fun DetailScreen(
     )
 ) {
     viewModel.getReportById(reportId)
-
     val uiState = viewModel.uiState.collectAsState().value
 
     when (uiState) {
@@ -63,10 +62,8 @@ fun DetailScreen(
                 navigateBack = navigateBack,
             )
         }
-
         is UiState.Error -> {
         }
-
         is UiState.Loading -> {
         }
     }
@@ -156,5 +153,15 @@ fun DetailInfo(
                 modifier = Modifier.padding(start = 8.dp)
             )
         }
+        // Report ID Text
+        Text(
+            text = "Report ID: $reportId",
+            modifier = Modifier.padding(vertical = 8.dp)
+        )
+        // Release Date Text
+        Text(
+            text = "Release Date: $releaseDate",
+            modifier = Modifier.padding(vertical = 8.dp)
+        )
     }
 }
