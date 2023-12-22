@@ -29,6 +29,7 @@ class ReportRepository(private val reportManager: ReportManager) {
             null
         }
     }
+
     suspend fun getSingleReport(reportId: String): ReportData? {
         val response = reportManager.getSingleReport(reportId)
         return if (response.isSuccessful) {

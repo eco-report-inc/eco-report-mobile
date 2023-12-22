@@ -2,7 +2,6 @@ package com.capstone.ecoreport.ui.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.capstone.ecoreport.data.DummyRepository
 import com.capstone.ecoreport.model.Dummy
 import com.capstone.ecoreport.ui.common.UiState
 import kotlinx.coroutines.flow.MutableStateFlow

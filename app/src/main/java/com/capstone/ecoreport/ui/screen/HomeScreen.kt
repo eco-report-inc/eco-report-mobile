@@ -37,12 +37,14 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import androidx.navigation.Navigation.findNavController
 import com.capstone.ecoreport.R
+import com.capstone.ecoreport.data.models.ReportData
 import com.capstone.ecoreport.dl.Injection
 import com.capstone.ecoreport.model.Dummy
 import com.capstone.ecoreport.navigation.Screen
 import com.capstone.ecoreport.ui.common.UiState
 import com.capstone.ecoreport.ui.item.DummyItem
 import com.capstone.ecoreport.ui.item.EmptyList
+import com.capstone.ecoreport.ui.item.ReportItem
 import com.capstone.ecoreport.ui.theme.EcoReportTheme
 import com.capstone.ecoreport.ui.viewmodel.HomeViewModel
 import com.capstone.ecoreport.ui.viewmodel.ViewModelFactory
@@ -54,23 +56,22 @@ fun HomeScreen(
     viewModel: HomeViewModel = viewModel(
         factory = ViewModelFactory(Injection.provideRepository())
     ),
-    navigateToDetail: (Int) -> Unit,
+    navigateToDetail: (String) -> Unit,
     navigateToCamera: () -> Unit
 ) {
-    val query by viewModel.query
-    viewModel.uiState.collectAsState(initial = UiState.Loading).value.let { uiState ->
-        when (uiState) {
-            is UiState.Loading -> {
-                viewModel.search(query)
-            }
-            is UiState.Success -> {
-                HomeContent(
-                    listDummy = uiState.data,
-                    navigateToDetail = navigateToDetail,
-                    navigateToCamera = navigateToCamera,
-                )
-            }
-            is UiState.Error -> {}
+    val uiState by viewModel.uiState.collectAsState()
+
+    when (uiState) {
+        is UiState.Loading -> {
+        }
+        is UiState.Success -> {
+            HomeContent(
+                listReport = (uiState as UiState.Success<List<ReportData>>).data,
+                navigateToDetail = navigateToDetail,
+                navigateToCamera = navigateToCamera
+            )
+        }
+        is UiState.Error -> {
         }
     }
 }
@@ -78,17 +79,16 @@ fun HomeScreen(
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun HomeContent(
-    listDummy: List<Dummy>,
-    navigateToDetail: (Int) -> Unit,
+    listReport: List<ReportData>,
+    navigateToDetail: (String) -> Unit,
     navigateToCamera: () -> Unit,
     modifier: Modifier = Modifier
 ) {
-
     Box {
         Column {
-            if (listDummy.isNotEmpty()) {
-                ListDummy(
-                    listDummy = listDummy,
+            if (listReport.isNotEmpty()) {
+                ListReport(
+                    listReport = listReport,
                     navigateToDetail = navigateToDetail,
                 )
             } else {
@@ -114,9 +114,9 @@ fun HomeContent(
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
-fun ListDummy(
-    listDummy: List<Dummy>,
-    navigateToDetail: (Int) -> Unit,
+fun ListReport(
+    listReport: List<ReportData>,
+    navigateToDetail: (String) -> Unit,
     contentPaddingTop: Dp = 0.dp
 ) {
     LazyColumn(
@@ -128,19 +128,16 @@ fun ListDummy(
         ),
         verticalArrangement = Arrangement.spacedBy(16.dp)
     ) {
-        items(listDummy, key = { it.id }) { item ->
-            DummyItem(
-                id = item.id,
-                username = item.username,
-                userImage = item.userImage,
+        items(listReport, key = { it.reportId }) { report ->
+            ReportItem(
+                report = report,
                 modifier = Modifier
                     .animateItemPlacement(tween(durationMillis = 200))
-                    .clickable { navigateToDetail(item.id) }
+                    .clickable { navigateToDetail(report.reportId) }
             )
         }
     }
 }
-
 @Preview(
     showBackground = true,
     wallpaper = Wallpapers.GREEN_DOMINATED_EXAMPLE
