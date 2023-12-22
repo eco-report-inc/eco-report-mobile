@@ -49,20 +49,29 @@ import com.capstone.ecoreport.ui.theme.EcoReportTheme
 import com.capstone.ecoreport.ui.viewmodel.HomeViewModel
 import com.capstone.ecoreport.ui.viewmodel.ViewModelFactory
 import java.time.temporal.TemporalQuery
+import androidx.compose.runtime.LaunchedEffect
 
 @Composable
 fun HomeScreen(
     modifier: Modifier = Modifier,
     viewModel: HomeViewModel = viewModel(
-        factory = ViewModelFactory(Injection.provideRepository(), Injection.provideProfilePhotoRepository())
+        factory = ViewModelFactory(
+            Injection.provideRepository(),
+            Injection.provideProfilePhotoRepository()
+        )
     ),
     navigateToDetail: (String) -> Unit,
     navigateToCamera: () -> Unit
 ) {
     val uiState by viewModel.uiState.collectAsState()
 
+    LaunchedEffect(key1 = viewModel) {
+        viewModel.getAllReports()
+    }
+
     when (uiState) {
         is UiState.Loading -> {
+            // Handle loading state
         }
         is UiState.Success -> {
             HomeContent(
@@ -72,6 +81,7 @@ fun HomeScreen(
             )
         }
         is UiState.Error -> {
+            // Handle error state
         }
     }
 }

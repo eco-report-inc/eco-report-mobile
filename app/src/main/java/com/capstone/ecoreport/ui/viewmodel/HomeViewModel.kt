@@ -15,9 +15,14 @@ class HomeViewModel(private val repository: ReportRepository) : ViewModel() {
         MutableStateFlow(UiState.Loading)
 
     val uiState: StateFlow<UiState<List<ReportData>>> get() = _uiState
-    fun getAllReports() = viewModelScope.launch {
-        repository.getAllReports()
-            ?.let { _uiState.value = UiState.Success(it) }
-            ?: run { _uiState.value = UiState.Error("Failed to fetch reports") }
+    fun getAllReports() {
+        viewModelScope.launch {
+            _uiState.value = UiState.Loading
+            repository.getAllReports()?.let {
+                _uiState.value = UiState.Success(it)
+            } ?: run {
+                _uiState.value = UiState.Error("Failed to fetch reports")
+            }
+        }
     }
 }
